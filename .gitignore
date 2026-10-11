@@ -1,3 +1,5 @@
+.env
+SKETCHFAB_API_KEY=fdcbe41594444ecb9bdb798e87bf1c4e
 node_modules/
 dist/
 build/
