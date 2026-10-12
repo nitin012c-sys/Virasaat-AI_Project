@@ -713,17 +713,17 @@
       footer p { max-width: 400px; color: #928578; font-family: "Playfair Display", serif; font-size: 13px; line-height: 1.6; }
       footer > span { color: #6d6258; font-size: 9px; letter-spacing: .1em; }
 
-      /* Modal Simulation for 3D View */
+      /* Modal Fullscreen 3D & Street View Viewer */
       .modal-backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(15, 12, 10, 0.88);
-        backdrop-filter: blur(8px);
+        background: rgba(10, 8, 6, 0.94);
+        backdrop-filter: blur(12px);
         z-index: 1000;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 20px;
+        padding: 1.5vh 2vw;
         opacity: 0;
         pointer-events: none;
         transition: opacity .3s ease;
@@ -732,22 +732,44 @@
         opacity: 1;
         pointer-events: auto;
       }
+      .modal-backdrop.is-fullscreen {
+        padding: 0;
+      }
       .modal-window {
-        background: #201a15;
-        border: 1px solid rgba(215, 179, 108, 0.4);
-        width: min(860px, 94vw);
-        max-height: 90vh;
-        overflow-y: auto;
+        background: #191410;
+        border: 1px solid rgba(215, 179, 108, 0.45);
+        width: 96vw;
+        height: 94vh;
+        max-width: 1560px;
+        display: flex;
+        flex-direction: column;
         color: #f0e8db;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        box-shadow: 0 35px 80px rgba(0,0,0,0.85);
         position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .modal-window.fullscreen-mode {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        border-radius: 0;
+        border: 0;
       }
       .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 18px 24px;
+        padding: 12px 24px;
         border-bottom: 1px solid rgba(240,232,219,0.15);
+        background: rgba(24, 19, 15, 0.98);
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .modal-title-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
       }
       .modal-header h3 {
         margin: 0;
@@ -755,79 +777,511 @@
         font-size: 20px;
         color: #e7ca90;
       }
-      .modal-close {
-        background: transparent;
-        border: 0;
-        color: #a49686;
-        font-size: 22px;
-        cursor: pointer;
+      .modal-header-badge {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: .1em;
         padding: 4px 8px;
-        line-height: 1;
+        background: rgba(215, 179, 108, 0.15);
+        color: #d7b36c;
+        border: 1px solid rgba(215, 179, 108, 0.25);
       }
-      .modal-close:hover { color: #fff; }
-      .modal-body { padding: 24px; }
-      .modal-viewer-preview {
-        height: 380px;
-        background-color: #120e0b;
-        background-size: cover;
-        background-position: center;
-        position: relative;
+      .modal-mode-tabs {
+        display: flex;
+        gap: 6px;
+      }
+      .modal-mode-tab {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(240,232,219,0.2);
+        color: #c9bdad;
+        padding: 7px 14px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        cursor: pointer;
+        transition: all .2s ease;
         display: flex;
         align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(240,232,219,0.15);
-        margin-bottom: 20px;
+        gap: 6px;
       }
-      .modal-hotspot {
-        position: absolute;
-        width: 32px;
-        height: 32px;
-        border: 1px solid #f3dfb8;
-        border-radius: 50%;
-        background: rgba(169,66,37,.85);
+      .modal-mode-tab:hover, .modal-mode-tab.is-active {
+        background: #d7b36c;
+        color: #201a15;
+        border-color: #d7b36c;
+        font-weight: 600;
+      }
+      .modal-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+      }
+      .modal-ext-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: rgba(215, 179, 108, 0.12);
+        border: 1px solid rgba(215, 179, 108, 0.35);
+        color: #e5b95e;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        text-decoration: none;
+        transition: background .2s ease;
+      }
+      .modal-ext-link:hover {
+        background: #d7b36c;
+        color: #201a15;
+      }
+      .modal-btn-icon {
+        background: transparent;
+        border: 1px solid rgba(240,232,219,0.2);
+        color: #c9bdad;
+        width: 34px;
+        height: 34px;
         display: grid;
         place-items: center;
         cursor: pointer;
-        box-shadow: 0 0 12px rgba(229,185,94,.6);
-        transition: transform .2s ease;
+        font-size: 14px;
+        transition: all .2s ease;
       }
-      .modal-hotspot:hover { transform: scale(1.15); }
-      .modal-viewer-badge {
-        position: absolute;
-        bottom: 16px;
-        left: 16px;
-        background: rgba(20,16,13,0.85);
-        padding: 8px 14px;
-        font-size: 11px;
-        border: 1px solid rgba(215,179,108,0.3);
-        color: #e5b95e;
+      .modal-btn-icon:hover {
+        color: #fff;
+        border-color: #d7b36c;
+      }
+      .modal-body {
+        flex: 1;
         display: flex;
+        flex-direction: column;
+        padding: 0;
+        overflow: hidden;
+        position: relative;
+      }
+      .modal-viewport-container {
+        flex: 1;
+        position: relative;
+        background: #0f0c0a;
+        display: flex;
+      }
+      .modal-viewport-iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
+      .streetview-banner {
+        position: absolute;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(20, 16, 13, 0.94);
+        border: 1px solid rgba(215, 179, 108, 0.55);
+        backdrop-filter: blur(8px);
+        padding: 9px 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        z-index: 10;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        border-radius: 4px;
+      }
+      .streetview-banner span {
+        font-size: 12px;
+        color: #f0e8db;
+      }
+      .streetview-banner a {
+        background: #d7b36c;
+        color: #201a15;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        padding: 5px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        transition: background .2s ease;
+      }
+      .streetview-banner a:hover {
+        background: #e7ca90;
+      }
+      .modal-footer-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 24px;
+        background: #14100c;
+        border-top: 1px solid rgba(240,232,219,0.12);
+        font-size: 11px;
+        color: #baa98f;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .modal-footer-bar strong {
+        color: #f0e8db;
+      }
+
+      /* Heritage Repository Section & State Culture Explorer */
+      .heritage-repository-section {
+        padding: 100px 7vw;
+        background: #17130f;
+        color: #f0e8db;
+        border-top: 1px solid rgba(240,232,219,0.12);
+        border-bottom: 1px solid rgba(240,232,219,0.12);
+      }
+      .heritage-header {
+        max-width: 860px;
+        margin-bottom: 35px;
+      }
+      .heritage-header h2 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(38px, 5.2vw, 68px);
+        line-height: .96;
+        margin: 12px 0 16px;
+        color: #f5ede1;
+      }
+      .heritage-header h2 em {
+        color: #d7b36c;
+        font-style: italic;
+      }
+      .heritage-header p {
+        font-size: 15px;
+        color: #baa98f;
+        line-height: 1.7;
+        margin: 0;
+      }
+      .heritage-search-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        max-width: 900px;
+        flex-wrap: wrap;
+      }
+      .heritage-search-input-wrap {
+        flex: 1;
+        min-width: 260px;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .heritage-search-input-wrap svg {
+        position: absolute;
+        left: 16px;
+        color: #d7b36c;
+        pointer-events: none;
+      }
+      .heritage-search-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(240, 232, 219, 0.2);
+        color: #f0e8db;
+        padding: 14px 18px 14px 46px;
+        font-size: 14px;
+        border-radius: 2px;
+        outline: none;
+        transition: border-color .2s ease;
+      }
+      .heritage-search-input:focus {
+        border-color: #d7b36c;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .heritage-category-nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+      }
+      .heritage-cat-btn {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(240,232,219,0.18);
+        color: #c9bdad;
+        padding: 9px 18px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        cursor: pointer;
+        transition: all .2s ease;
+        display: inline-flex;
         align-items: center;
         gap: 8px;
       }
-      .modal-info-grid {
+      .heritage-cat-btn:hover, .heritage-cat-btn.is-active {
+        background: #d7b36c;
+        color: #1a1510;
+        border-color: #d7b36c;
+        font-weight: 600;
+      }
+      .heritage-state-pills {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 12px;
+        margin-bottom: 30px;
+        scrollbar-width: thin;
+        scrollbar-color: #d7b36c rgba(255,255,255,0.05);
+      }
+      .heritage-state-pill {
+        flex: 0 0 auto;
+        background: transparent;
+        border: 1px solid rgba(215, 179, 108, 0.25);
+        color: #baa98f;
+        padding: 6px 14px;
+        font-size: 11px;
+        letter-spacing: .05em;
+        cursor: pointer;
+        transition: all .2s ease;
+        border-radius: 20px;
+      }
+      .heritage-state-pill:hover, .heritage-state-pill.is-active {
+        background: rgba(215, 179, 108, 0.15);
+        color: #f0e8db;
+        border-color: #d7b36c;
+      }
+      .heritage-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-        margin-top: 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 26px;
+      }
+      .heritage-card {
+        background: #201a15;
+        border: 1px solid rgba(240, 232, 219, 0.14);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+        cursor: pointer;
+        position: relative;
+      }
+      .heritage-card:hover {
+        transform: translateY(-4px);
+        border-color: #d7b36c;
+        box-shadow: 0 14px 35px rgba(0,0,0,0.55);
+      }
+      .heritage-card-media {
+        width: 100%;
+        height: 220px;
+        position: relative;
+        overflow: hidden;
+        background: #0f0c0a;
+      }
+      .heritage-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .4s ease;
+      }
+      .heritage-card:hover .heritage-card-media img {
+        transform: scale(1.06);
+      }
+      .heritage-badge-stack {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        z-index: 2;
+      }
+      .heritage-badge {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        padding: 3px 8px;
+        font-weight: 600;
+        border-radius: 2px;
+        background: rgba(20, 16, 13, 0.85);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: #f0e8db;
+      }
+      .heritage-badge.state-badge {
+        border-color: #d7b36c;
+        color: #e5b95e;
+      }
+      .heritage-badge.cat-badge {
+        background: rgba(169, 66, 37, 0.88);
+        border-color: #a84227;
+        color: #fff;
+      }
+      .heritage-card-content {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+      .heritage-card-title {
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        margin: 0 0 4px;
+        color: #f5ede1;
+      }
+      .heritage-card-sub {
+        font-size: 11px;
+        color: #d7b36c;
+        margin-bottom: 14px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+      .heritage-card-purpose {
+        font-size: 12px;
+        line-height: 1.6;
+        color: #baa98f;
+        margin-bottom: 12px;
+        flex: 1;
+      }
+      .heritage-card-purpose strong {
+        color: #e5b95e;
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        margin-bottom: 2px;
+      }
+      .heritage-card-history {
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 2px solid #d7b36c;
+        padding: 8px 12px;
+        font-size: 11px;
+        line-height: 1.5;
+        color: #c9bdad;
+        margin-bottom: 14px;
+      }
+      .heritage-card-history strong {
+        color: #f0e8db;
+        display: block;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        margin-bottom: 2px;
+      }
+      .heritage-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 12px;
+        border-top: 1px solid rgba(240, 232, 219, 0.1);
         font-size: 11px;
       }
-      .modal-info-item {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(240,232,219,0.1);
-        padding: 12px;
-      }
-      .modal-info-item small {
-        display: block;
-        color: #9f9280;
+      .heritage-portal-link {
+        color: #e5b95e;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 10px;
         text-transform: uppercase;
-        font-size: 8px;
-        letter-spacing: .1em;
+        letter-spacing: .06em;
+        transition: color .2s ease;
+      }
+      .heritage-portal-link:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      .heritage-explore-btn {
+        background: transparent;
+        border: 1px solid rgba(215, 179, 108, 0.4);
+        color: #d7b36c;
+        padding: 4px 10px;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        cursor: pointer;
+        transition: all .2s ease;
+      }
+      .heritage-explore-btn:hover {
+        background: #d7b36c;
+        color: #1a1510;
+      }
+
+      /* In-panel Culture Experience Styling */
+      .culture-browser-header {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      .culture-search-panel-input {
+        width: 100%;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(240,232,219,0.2);
+        color: #f0e8db;
+        padding: 11px 16px;
+        font-size: 13px;
+        outline: none;
+        transition: border-color .2s ease;
+      }
+      .culture-search-panel-input:focus {
+        border-color: #d7b36c;
+      }
+      .culture-panel-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        max-height: 480px;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+      .culture-panel-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(240,232,219,0.12);
+        padding: 12px;
+        display: flex;
+        gap: 12px;
+        cursor: pointer;
+        transition: all .2s ease;
+      }
+      .culture-panel-card:hover {
+        border-color: #d7b36c;
+        background: rgba(215,179,108,0.06);
+      }
+      .culture-panel-card img {
+        width: 72px;
+        height: 72px;
+        object-fit: cover;
+        flex: 0 0 auto;
+        border: 1px solid rgba(240,232,219,0.15);
+      }
+      .culture-panel-card-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+      }
+      .culture-panel-card-info strong {
+        font-family: "Playfair Display", serif;
+        font-size: 14px;
+        color: #f0e8db;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .culture-panel-card-info span {
+        font-size: 10px;
+        color: #d7b36c;
+        text-transform: uppercase;
+        letter-spacing: .06em;
         margin-bottom: 4px;
       }
-      .modal-info-item strong {
-        font-size: 13px;
-        color: #f0e8db;
+      .culture-panel-card-info p {
+        font-size: 10px;
+        line-height: 1.4;
+        color: #a3937e;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      @media (max-width: 1000px) {
+        .heritage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 640px) {
+        .heritage-grid { grid-template-columns: 1fr; }
+        .culture-panel-grid { grid-template-columns: 1fr; }
       }
 
       @media (max-width: 1000px) {
@@ -871,6 +1325,21 @@
         footer { grid-template-columns: 1fr; padding: 45px 24px; gap: 18px; }
         .modal-info-grid { grid-template-columns: 1fr; }
       }
+      .sketchfab-section { padding: 100px 7vw; background: #efe9dc; color: var(--ink); }
+      .sketchfab-section h2 { margin: 0; font-family: "Playfair Display", serif; font-size: clamp(38px, 5vw, 68px); line-height: .95; }
+      .sketchfab-section > p { max-width: 620px; color: #776b5f; line-height: 1.7; }
+      .sketchfab-search { display: flex; gap: 10px; margin: 32px 0; max-width: 620px; }
+      .sketchfab-search input { flex: 1; min-width: 0; border: 1px solid var(--line); padding: 14px 16px; background: #f8f4eb; color: var(--ink); font: inherit; }
+      .sketchfab-search button { border: 1px solid var(--ink); padding: 0 18px; background: var(--ink); color: var(--paper); cursor: pointer; font: inherit; }
+      .monument-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+      .sketchfab-card { overflow: hidden; background: #f8f4eb; border: 1px solid var(--line); }
+      .sketchfab-card iframe { display: block; width: 100%; aspect-ratio: 4 / 3; border: 0; }
+      .sketchfab-card-info { padding: 14px 16px 18px; }
+      .sketchfab-card-info strong { display: block; font-family: "Playfair Display", serif; font-size: 18px; }
+      .sketchfab-card-info a { display: inline-block; margin-top: 8px; color: var(--brick); font-size: 12px; text-decoration: underline; }
+      .gallery-status { grid-column: 1 / -1; color: #776b5f; }
+      @media (max-width: 900px) { .monument-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 560px) { .sketchfab-section { padding: 72px 24px; } .sketchfab-search { flex-direction: column; } .sketchfab-search button { min-height: 46px; } .monument-gallery { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
@@ -1045,16 +1514,35 @@
 
           <!-- Module Panel: State Culture -->
           <div class="culture-browser experience-panel" id="panel-culture" style="display: none;">
+            <div class="culture-browser-header">
+              <input
+                id="culture-search-panel-input"
+                class="culture-search-panel-input"
+                type="search"
+                placeholder="Search state, festival, food or musical instrument..."
+                aria-label="Search state culture"
+              />
+            </div>
             <div class="state-picker">
-              <small>First, choose a state</small>
+              <small>Filter by state</small>
               <div id="state-picker-buttons">
                 <!-- Rendered by JS -->
               </div>
             </div>
             <blockquote id="state-slogan-quote">“Footprints of valour across the golden sands.”</blockquote>
-            <small class="collection-label">Now choose what you want to discover</small>
-            <div class="culture-options" id="culture-categories-grid">
+            <div class="heritage-category-nav" id="culture-panel-cat-nav" style="margin-bottom: 14px;">
+              <button type="button" class="heritage-cat-btn is-active" data-cat="all">✦ All Heritage</button>
+              <button type="button" class="heritage-cat-btn" data-cat="festivals">🎪 Festivals</button>
+              <button type="button" class="heritage-cat-btn" data-cat="food">🍲 Food &amp; Culture</button>
+              <button type="button" class="heritage-cat-btn" data-cat="instruments">🪕 Instruments</button>
+            </div>
+            <div class="culture-panel-grid" id="culture-panel-items-grid">
               <!-- Rendered by JS -->
+            </div>
+            <div style="margin-top: 16px; text-align: center;">
+              <a href="#heritage-repository" style="display: inline-flex; align-items: center; gap: 8px; color: #d7b36c; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; padding: 8px 16px; border: 1px solid rgba(215,179,108,0.3); background: rgba(215,179,108,0.08);">
+                Explore Full 36 States National Repository ↓
+              </a>
             </div>
           </div>
 
@@ -1118,6 +1606,60 @@
         </div>
       </section>
 
+      <!-- Living Heritage Repository: Festivals, Food & Musical Instruments of India -->
+      <section class="heritage-repository-section" id="heritage-repository" aria-labelledby="heritage-repository-title">
+        <div class="heritage-header">
+          <p class="eyebrow"><span></span> National Cultural Archives · Ministry of Culture Portal</p>
+          <h2 id="heritage-repository-title">FESTIVALS, FOOD &amp; SOUNDS<br /><em>OF INDIA.</em></h2>
+          <p>
+            Explore living traditions documented across the States of India—from sacred harvest festivals and centuries-old culinary heritage to indigenous musical instruments codified in the ancient <em>Natya Shastra</em>.
+          </p>
+        </div>
+
+        <!-- Search Bar with Live State & Keyword Filter -->
+        <div class="heritage-search-bar">
+          <div class="heritage-search-input-wrap">
+            <span id="search-icon-heritage"></span>
+            <input
+              id="heritage-main-search-input"
+              class="heritage-search-input"
+              type="search"
+              placeholder="Search festivals, traditional cuisines, musical instruments or states (e.g. Bihu, Sarod, Pongal, Biryani)..."
+              aria-label="Search Indian Heritage"
+            />
+          </div>
+        </div>
+
+        <!-- Category Switcher Tabs -->
+        <div class="heritage-category-nav" id="heritage-category-nav">
+          <button type="button" class="heritage-cat-btn is-active" data-cat="all">✦ All Repository</button>
+          <button type="button" class="heritage-cat-btn" data-cat="festivals">🎪 Festivals of India</button>
+          <button type="button" class="heritage-cat-btn" data-cat="food">🍲 Food &amp; Culture</button>
+          <button type="button" class="heritage-cat-btn" data-cat="instruments">🪕 Musical Instruments</button>
+        </div>
+
+        <!-- State Filter Pills -->
+        <div class="heritage-state-pills" id="heritage-state-pills" aria-label="Filter by state">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Heritage Cards Grid -->
+        <div class="heritage-grid" id="heritage-items-grid" aria-live="polite">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <section class="sketchfab-section" aria-labelledby="sketchfab-title">
+        <p class="eyebrow"><span></span> Public 3D model search</p>
+        <h2 id="sketchfab-title">EXPLORE MONUMENT<br /><em>MODELS.</em></h2>
+        <p>Search the public Sketchfab catalog and open each interactive model directly in the page.</p>
+        <form class="sketchfab-search" id="monument-search-form">
+          <input id="monument-search-term" name="search" type="search" value="Indian monuments" aria-label="Search Sketchfab monuments" />
+          <button type="submit">Search models</button>
+        </form>
+        <div id="monument-gallery" class="monument-gallery" data-search-term="Indian monuments" aria-live="polite"></div>
+      </section>
+
       <!-- Site Footer -->
       <footer>
         <div class="footer-brand">
@@ -1129,34 +1671,73 @@
         <span>© 2026 VIRAASATVERSE</span>
       </footer>
 
-      <!-- 3D Interactive Viewer Simulation Modal -->
-      <div class="modal-backdrop" id="viewer-modal">
-        <div class="modal-window">
+      <!-- 3D Interactive & Street View Fullscreen Modal -->
+      <div class="modal-backdrop is-fullscreen" id="viewer-modal">
+        <div class="modal-window fullscreen-mode" id="modal-window-box">
           <div class="modal-header">
-            <h3 id="modal-monument-name">Hawa Mahal — Interactive 3D Model</h3>
-            <button class="modal-close" id="modal-close-btn" aria-label="Close dialog">&times;</button>
+            <div class="modal-title-group">
+              <h3 id="modal-monument-name">Taj Mahal — Interactive 3D Model</h3>
+              <span class="modal-header-badge" id="modal-monument-era">Agra · Mughal Empire (1648)</span>
+            </div>
+            <div class="modal-mode-tabs">
+              <button type="button" class="modal-mode-tab is-active" data-mode="model" id="tab-mode-model">✦ 3D Model</button>
+              <button type="button" class="modal-mode-tab" data-mode="video" id="tab-mode-video">► Video Walkthrough</button>
+              <button type="button" class="modal-mode-tab" data-mode="maps" id="tab-mode-maps">⚲ Google 3D Street View</button>
+            </div>
+            <div class="modal-actions">
+              <a href="#" target="_blank" rel="noopener noreferrer" class="modal-ext-link" id="modal-source-link">Open Source ↗</a>
+              <button type="button" class="modal-btn-icon" id="modal-fullscreen-btn" title="Toggle Fullscreen">⛶</button>
+              <button type="button" class="modal-btn-icon" id="modal-close-btn" aria-label="Close dialog">✕</button>
+            </div>
           </div>
           <div class="modal-body">
-            <div class="modal-viewer-preview" id="modal-preview-screen">
-              <div class="modal-hotspot" style="top: 36%; left: 48%;" title="Hotspot: Lattice Windows (Jharokhas)">✦</div>
-              <div class="modal-hotspot" style="top: 64%; left: 60%;" title="Hotspot: Fluted sandstone columns">✦</div>
-              <div class="modal-viewer-badge" id="modal-mode-badge">
-                <span>3D VIEWPORT ACTIVE · 18 HOTSPOTS VERIFIED</span>
+            <div class="modal-viewport-container">
+              <iframe id="modal-viewport-frame" class="modal-viewport-iframe" src="" allow="autoplay; fullscreen; xr-spatial-tracking; geolocation; accelerometer; gyroscope" allowfullscreen></iframe>
+              <div class="streetview-banner" id="modal-streetview-banner" style="display: none;">
+                <span>📍 Google Arts & Culture 360° Street View Experience:</span>
+                <a href="#" target="_blank" rel="noopener noreferrer" id="modal-streetview-btn">Launch Official 360° Street View ↗</a>
               </div>
             </div>
-            <div class="modal-info-grid">
-              <div class="modal-info-item">
-                <small>Location & Era</small>
-                <strong id="modal-monument-era">Jaipur · Kachhwaha Rajput (1799)</strong>
+            <div class="modal-footer-bar">
+              <div>
+                <span id="modal-footer-hotspots">✦ 24 Verified Hotspots Active</span>
+                <span style="margin: 0 8px; opacity: 0.4;">|</span>
+                <span id="modal-footer-dynasty">Dynasty: Mughal Empire</span>
               </div>
-              <div class="modal-info-item">
-                <small>Interaction</small>
-                <strong>360° Rotatable photogrammetry mesh</strong>
-              </div>
-              <div class="modal-info-item">
-                <small>Archival Source</small>
-                <strong>Virasaat Verified Open Catalog</strong>
-              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cultural Item Archival Detail Modal -->
+      <div class="modal-backdrop" id="cultural-detail-modal">
+        <div class="modal-window" style="max-width: 900px; max-height: 92vh; overflow-y: auto;">
+          <div class="modal-header">
+            <div class="modal-title-group">
+              <h3 id="cultural-modal-title">Festival / Tradition Details</h3>
+              <span class="modal-header-badge" id="cultural-modal-badge">State · Category</span>
+            </div>
+            <button type="button" class="modal-btn-icon" id="cultural-modal-close-btn" aria-label="Close dialog">✕</button>
+          </div>
+          <div class="modal-body" style="padding: 24px; overflow-y: auto;">
+            <div style="width: 100%; height: 340px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(240,232,219,0.15);">
+              <img id="cultural-modal-image" src="" alt="Cultural heritage item" style="width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+            <div style="margin-bottom: 16px;">
+              <h4 style="font-family: 'Playfair Display', serif; font-size: 24px; color: #f5ede1; margin: 0 0 6px;" id="cultural-modal-heading"></h4>
+              <p style="color: #d7b36c; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 16px;" id="cultural-modal-sub"></p>
+            </div>
+            <div style="background: rgba(215, 179, 108, 0.08); border-left: 3px solid #d7b36c; padding: 14px 18px; margin-bottom: 18px;">
+              <strong style="color: #e5b95e; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; display: block; margin-bottom: 6px;">✦ Purpose &amp; Cultural Meaning:</strong>
+              <p style="color: #f0e8db; font-size: 13px; line-height: 1.6; margin: 0;" id="cultural-modal-purpose"></p>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(240, 232, 219, 0.12); padding: 14px 18px; margin-bottom: 22px;">
+              <strong style="color: #baa98f; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; display: block; margin-bottom: 6px;">📜 Historical Background &amp; Archival Record ("hius data"):</strong>
+              <p style="color: #c9bdad; font-size: 13px; line-height: 1.6; margin: 0;" id="cultural-modal-history"></p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(240,232,219,0.12); padding-top: 16px; flex-wrap: wrap; gap: 12px;">
+              <span style="font-size: 11px; color: #8e8272;">Source: Ministry of Culture, Govt. of India (Indian Culture Portal)</span>
+              <a href="#" target="_blank" rel="noopener noreferrer" id="cultural-modal-source-btn" class="modal-ext-link">Visit Official Portal Record ↗</a>
             </div>
           </div>
         </div>
@@ -1164,6 +1745,9 @@
 
     </main>
     <!-- figma:body-end -->
+
+    <!-- Sketchfab public search needs no credential. -->
+    <script src="/monument-gallery.js" defer></script>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
@@ -1189,6 +1773,8 @@
         document.querySelectorAll(".btn-arrow").forEach(el => el.innerHTML = ICONS.arrow(17));
         document.getElementById("search-icon-3d").innerHTML = ICONS.search(18);
         document.getElementById("search-icon-story").innerHTML = ICONS.search(18);
+        const searchIconHeritage = document.getElementById("search-icon-heritage");
+        if (searchIconHeritage) searchIconHeritage.innerHTML = ICONS.search(18);
         document.getElementById("spark-icon-btn").innerHTML = ICONS.spark(17);
         document.getElementById("scan-btn-icon").innerHTML = ICONS.scan(18);
         document.getElementById("story-play-icon").innerHTML = ICONS.play(20);
@@ -1239,31 +1825,34 @@
 
         const monuments = [
           {
-            name: "Hawa Mahal",
-            place: "Jaipur, Rajasthan",
-            year: 1799,
-            dynasty: "Kachhwaha Rajput",
-            image: "https://images.unsplash.com/photo-1524230507669-5ff97982bb5e?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
-            hotspots: 18,
-            desc: "The Palace of Winds, built as an extension of Jaipur City Palace with 953 honeycomb jharokhas."
-          },
-          {
             name: "Taj Mahal",
             place: "Agra, Uttar Pradesh",
             year: 1648,
             dynasty: "Mughal Empire",
             image: "https://images.unsplash.com/photo-1532664189809-02133fee698d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
             hotspots: 24,
-            desc: "The renowned white marble mausoleum on the Yamuna river, commissioned by Mughal Emperor Shah Jahan."
+            desc: "The renowned white marble mausoleum on the Yamuna river, commissioned by Mughal Emperor Shah Jahan.",
+            uid: "33149233cefd492b9abdd50fe5a8c921",
+            modelUrl: "https://sketchfab.com/3d-models/taj-mahal-33149233cefd492b9abdd50fe5a8c921",
+            modelEmbed: "https://sketchfab.com/models/33149233cefd492b9abdd50fe5a8c921/embed?autostart=1&ui_infos=0",
+            streetViewUrl: "https://artsandculture.google.com/streetview/taj-mahal/UwGKcX7FFM5U4g?sv_lng=78.04199578059838&sv_lat=27.173762258910912&sv_h=9.155004179979311&sv_p=-1.0717467105690446&sv_pid=vQAmRxAVGgXXQmPcT8d0cQ&sv_z=1",
+            mapsEmbedUrl: "https://maps.google.com/maps?q=loc:27.1751,78.0421&t=k&z=17&output=embed",
+            videoEmbedUrl: "https://www.youtube-nocookie.com/embed/49HTYo4Pf70?autoplay=1"
           },
           {
-            name: "Red Fort",
-            place: "Delhi",
-            year: 1639,
-            dynasty: "Mughal Empire",
-            image: "https://images.unsplash.com/photo-1519955266818-0231b63402bc?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
-            hotspots: 31,
-            desc: "The fortified red sandstone palace complex of Shahjahanabad in Old Delhi."
+            name: "Sun Temple, Konark",
+            place: "Konark, Odisha",
+            year: 1250,
+            dynasty: "Eastern Ganga dynasty",
+            image: "https://images.unsplash.com/photo-1596901224267-67ca38199090?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
+            hotspots: 20,
+            desc: "Thirteenth-century monumental chariot temple of Surya with 24 carved stone wheels.",
+            uid: "6cc905be2ae34e8091eb1eaa84a17738",
+            modelUrl: "https://sketchfab.com/3d-models/sun-temple-konark-6cc905be2ae34e8091eb1eaa84a17738",
+            modelEmbed: "https://sketchfab.com/models/6cc905be2ae34e8091eb1eaa84a17738/embed?autostart=1&ui_infos=0",
+            streetViewUrl: "https://artsandculture.google.com/streetview/sun-temple-konark/4QF7iV2jUj6lSg?sv_lng=86.0945&sv_lat=19.8876&sv_h=0&sv_p=0&sv_pid=konark&sv_z=1",
+            mapsEmbedUrl: "https://maps.google.com/maps?q=loc:19.8876,86.0945&t=k&z=17&output=embed",
+            videoEmbedUrl: "https://www.youtube-nocookie.com/embed/Q53z8eQYg3c?autoplay=1"
           },
           {
             name: "Qutub Minar",
@@ -1272,16 +1861,13 @@
             dynasty: "Delhi Sultanate",
             image: "https://images.unsplash.com/photo-1629735919597-fed920b5bd84?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
             hotspots: 14,
-            desc: "A towering 73m fluted brick minaret built by Qutb-ud-din Aibak and Iltutmish."
-          },
-          {
-            name: "Sun Temple",
-            place: "Konark, Odisha",
-            year: 1250,
-            dynasty: "Eastern Ganga dynasty",
-            image: "https://images.unsplash.com/photo-1596901224267-67ca38199090?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
-            hotspots: 20,
-            desc: "Thirteenth-century monumental chariot temple of Surya with 24 carved stone wheels."
+            desc: "A towering 73m fluted brick minaret built by Qutb-ud-din Aibak and Iltutmish.",
+            uid: "e165e25ec8f1497aa83ab72419f40ddc",
+            modelUrl: "https://sketchfab.com/3d-models/qutub-minar-e165e25ec8f1497aa83ab72419f40ddc",
+            modelEmbed: "https://sketchfab.com/models/e165e25ec8f1497aa83ab72419f40ddc/embed?autostart=1&ui_infos=0",
+            streetViewUrl: "https://artsandculture.google.com/streetview/qutub-minar/6AG0rS4-oMGwLw?sv_lng=77.18488656702158&sv_lat=28.524744699093315&sv_h=7.5&sv_p=11&sv_pid=bu6n95IlT9-_w7UpN66Iiw&sv_z=1",
+            mapsEmbedUrl: "https://maps.google.com/maps?q=loc:28.5245,77.1855&t=k&z=17&output=embed",
+            videoEmbedUrl: "https://www.youtube-nocookie.com/embed/x1v1sHw9B8M?autoplay=1"
           },
           {
             name: "Brihadeeswarar Temple",
@@ -1290,7 +1876,43 @@
             dynasty: "Chola dynasty",
             image: "https://images.unsplash.com/photo-1719498481736-c125dfa45b03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
             hotspots: 25,
-            desc: "The great Chola granite temple dedicated to Shiva, celebrating Dravidian engineering."
+            desc: "The great Chola granite temple dedicated to Shiva, celebrating Dravidian engineering.",
+            uid: "b80c75f91dad4994a0e7000467433ac9",
+            modelUrl: "https://sketchfab.com/3d-models/brihadisvara-temple-b80c75f91dad4994a0e7000467433ac9",
+            modelEmbed: "https://sketchfab.com/models/b80c75f91dad4994a0e7000467433ac9/embed?autostart=1&ui_infos=0",
+            streetViewUrl: "https://artsandculture.google.com/streetview/brihadeshwara-temple/bQEBFDWGbe1WIQ?sv_lng=79.13209723333006&sv_lat=10.782600687334803&sv_h=-115&sv_p=20&sv_pid=3JuLIKGyCVNnfhbHM9zc5A&sv_z=1",
+            mapsEmbedUrl: "https://maps.google.com/maps?q=loc:10.7828,79.1318&t=k&z=17&output=embed",
+            videoEmbedUrl: "https://www.youtube-nocookie.com/embed/hB55Jj-tqB4?autoplay=1"
+          },
+          {
+            name: "Hawa Mahal",
+            place: "Jaipur, Rajasthan",
+            year: 1799,
+            dynasty: "Kachhwaha Rajput",
+            image: "https://images.unsplash.com/photo-1524230507669-5ff97982bb5e?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
+            hotspots: 18,
+            desc: "The Palace of Winds, built as an extension of Jaipur City Palace with 953 honeycomb jharokhas.",
+            uid: "47c0ea2a759544729c137d8b86ba5b9a",
+            modelUrl: "https://studio.tripo3d.ai/3d-model/hawa-mahal-jaipur-pink-sandstone-facade-with-hundreds-of-jharokhas-and-420df521-394d-4fda-b836-64cf37d1798f",
+            modelEmbed: "https://sketchfab.com/models/47c0ea2a759544729c137d8b86ba5b9a/embed?autostart=1&ui_infos=0",
+            streetViewUrl: "https://artsandculture.google.com/streetview/hawa-mahal/awE1gYhL27z69w?sv_lng=75.8267&sv_lat=26.9239&sv_h=0&sv_p=0&sv_pid=hawamahal&sv_z=1",
+            mapsEmbedUrl: "https://maps.google.com/maps?q=loc:26.9239,75.8267&t=k&z=17&output=embed",
+            videoEmbedUrl: "https://www.youtube-nocookie.com/embed/5aM2tE8gZk0?autoplay=1"
+          },
+          {
+            name: "Red Fort",
+            place: "Delhi",
+            year: 1639,
+            dynasty: "Mughal Empire",
+            image: "https://images.unsplash.com/photo-1519955266818-0231b63402bc?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=88&w=1200",
+            hotspots: 31,
+            desc: "The fortified red sandstone palace complex of Shahjahanabad in Old Delhi.",
+            uid: "bfde286898e94fd6bd44570df4669a8c",
+            modelUrl: "https://sketchfab.com/3d-models/red-fort-bfde286898e94fd6bd44570df4669a8c",
+            modelEmbed: "https://sketchfab.com/models/bfde286898e94fd6bd44570df4669a8c/embed?autostart=1&ui_infos=0",
+            streetViewUrl: "https://artsandculture.google.com/streetview/red-fort/TAGwBR4r9ZE7dg?sv_lng=77.2372845722391&sv_lat=28.656020503802175&sv_h=73.46682828661217&sv_p=13.099218224881099&sv_pid=6fhnf129W3s4sKLASuWk3Q&sv_z=1",
+            mapsEmbedUrl: "https://maps.google.com/maps?q=loc:28.6562,77.2410&t=k&z=17&output=embed",
+            videoEmbedUrl: "https://www.youtube-nocookie.com/embed/6E_U-0Xk2y0?autoplay=1"
           }
         ];
 
@@ -1307,40 +1929,785 @@
           "Rajasthan": {
             slogan: "Footprints of valour across the golden sands.",
             categories: [
-              { title: "Legends & Legacies", detail: "Rajput chronicles, forts and stories of courage" },
-              { title: "Food & Flavours", detail: "Dal baati churma, ker sangri and royal kitchens" },
-              { title: "Festivals & Faith", detail: "Gangaur, Teej and desert celebrations" },
-              { title: "Craft & Costume", detail: "Blue pottery, bandhani and block printing" }
-            ]
-          },
-          "Tamil Nadu": {
-            slogan: "Where living temples keep a thousand years of rhythm.",
-            categories: [
-              { title: "Legends & Legacies", detail: "Chola seas, Sangam poetry and temple cities" },
-              { title: "Food & Flavours", detail: "Pongal, filter coffee and Chettinad kitchens" },
-              { title: "Festivals & Faith", detail: "Pongal, Karthigai and temple traditions" },
-              { title: "Dance & Music", detail: "Bharatanatyam and Carnatic compositions" }
+              { title: "Legends & Legacies", detail: "Rajput chronicles, hill forts and stories of courage" },
+              { title: "Food & Flavours", detail: "Dal baati churma, ker sangri and royal rasois" },
+              { title: "Festivals & Faith", detail: "Pushkar Camel Mela, Gangaur and Teej" },
+              { title: "Musical Heritage", detail: "Bhapang, Kamayacha and Dhani Sarangi" }
             ]
           },
           "Assam": {
             slogan: "Stories carried by the great river and the red earth.",
             categories: [
-              { title: "Legends & Legacies", detail: "Ahom heritage and the chronicles of Buranjis" },
-              { title: "Food & Flavours", detail: "Khar, pitha and indigenous ingredients" },
-              { title: "Festivals & Faith", detail: "Bihu seasons and satra traditions" },
-              { title: "Craft & Costume", detail: "Muga silk, bamboo craft and the gamosa" }
+              { title: "Legends & Legacies", detail: "Ahom kingdom heritage and chronicles of Buranjis" },
+              { title: "Food & Flavours", detail: "Masor tenga, khaar, pitha and elephant apple" },
+              { title: "Festivals & Faith", detail: "Magh Bihu, Rongali Bihu and satra dances" },
+              { title: "Musical Heritage", detail: "Kali horn, Tokari lute and Bihu Dhol" }
+            ]
+          },
+          "Tamil Nadu": {
+            slogan: "Where living temples keep a thousand years of rhythm.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Chola seafaring, Sangam poetry and Brihadisvara" },
+              { title: "Food & Flavours", detail: "Chettinad spiced feasts, pongal and filter kaapi" },
+              { title: "Festivals & Faith", detail: "Thai Pongal, Mattu Pongal and Karthigai Deepam" },
+              { title: "Musical Heritage", detail: "Saraswati Veena, Nadaswaram, Bhajan Tambura and Ghatam" }
             ]
           },
           "Gujarat": {
             slogan: "A coast of commerce, colour and enduring craft.",
             categories: [
-              { title: "Legends & Legacies", detail: "Harappan cities, stepwells and freedom stories" },
-              { title: "Food & Flavours", detail: "Undhiyu, dhokla and the Gujarati thali" },
-              { title: "Festivals & Faith", detail: "Navratri, Uttarayan and vibrant garba" },
-              { title: "Craft & Costume", detail: "Kutch embroidery, patola and bandhani" }
+              { title: "Legends & Legacies", detail: "Harappan Dholavira, Rani ki Vav and stepwells" },
+              { title: "Food & Flavours", detail: "Undhiyu in earthen pots, dhokla and Gujarati thali" },
+              { title: "Festivals & Faith", detail: "Navratri Garba, Uttarayan and Rann Utsav" },
+              { title: "Musical Heritage", detail: "Karnat long horn, Ravanahatha and Jodiya Pawa" }
+            ]
+          },
+          "Punjab": {
+            slogan: "Land of five rivers, golden wheat and boundless warmth.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Harappan tandoor roots and Khalsa foundation" },
+              { title: "Food & Flavours", detail: "Sarson da saag, makki di roti and churned butter" },
+              { title: "Festivals & Faith", detail: "Baisakhi harvest, Lohri and Gurpurab" },
+              { title: "Musical Heritage", detail: "Dhol, Tumbi, Algoza and Chimta" }
+            ]
+          },
+          "West Bengal": {
+            slogan: "A river delta where art, literature and devotion intertwine.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Terracotta temples of Bishnupur and colonial renaissance" },
+              { title: "Food & Flavours", detail: "Shorshe ilish, macher jhol, sandesh and mishti doi" },
+              { title: "Festivals & Faith", detail: "Durga Puja (UNESCO Heritage) and Dhaak Utsav" },
+              { title: "Musical Heritage", detail: "Khamak / Anandalahari, Ektara and Dhaak" }
+            ]
+          },
+          "Kerala": {
+            slogan: "God’s own country of sacred backwaters and spice hills.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Chera maritime trade, Muziris and spice routes" },
+              { title: "Food & Flavours", detail: "Traditional 28-dish plantain leaf Sadya and appam" },
+              { title: "Festivals & Faith", detail: "Onam harvest, Vallam Kali boat races and Thrissur Pooram" },
+              { title: "Musical Heritage", detail: "Chenda melam, Idakka and Panchavadyam" }
+            ]
+          },
+          "Odisha": {
+            slogan: "Soul of India, carved in granite, cloth and rhythm.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Kalinga empire, Konark Sun Temple and Jagannath" },
+              { title: "Food & Flavours", detail: "Chhena poda baked cheese, dalma and pakhala" },
+              { title: "Festivals & Faith", detail: "Rath Yatra of Puri, Raja Parba and Chandan Yatra" },
+              { title: "Musical Heritage", detail: "Ganilauri wood idiophone, Mardala and tribal flutes" }
+            ]
+          },
+          "Nagaland": {
+            slogan: "Hills of warrior legends, mist and vibrant clan traditions.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Heritage of 16 recognized indigenous Naga tribes" },
+              { title: "Food & Flavours", detail: "Smoked pork with raja mircha, fermented axone and bamboo" },
+              { title: "Festivals & Faith", detail: "Hornbill Festival of Festivals at Kisama" },
+              { title: "Musical Heritage", detail: "Log drum percussion and multi-pitch mouth horns" }
+            ]
+          },
+          "Meghalaya": {
+            slogan: "Abode of clouds, living root bridges and sacred groves.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Khasi, Garo and Jaintia matrilineal traditions" },
+              { title: "Food & Flavours", detail: "Jadoh red rice, dohneiiong sesame pork and tungrymbai" },
+              { title: "Festivals & Faith", detail: "Wangala Hundred Drums Festival and Shad Suk Mynsiem" },
+              { title: "Musical Heritage", detail: "Bom great kettle drum and Duitara two-stringed lute" }
+            ]
+          },
+          "Maharashtra": {
+            slogan: "Forts of Shivaji, coastal Konkan and living devotion.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Maratha hill forts, Ajanta-Ellora caves and Shivaji" },
+              { title: "Food & Flavours", detail: "Puran poli, pithla bhakri, misal pav and solkadhi" },
+              { title: "Festivals & Faith", detail: "Ganesh Chaturthi, Gudi Padwa and Pandharpur Wari" },
+              { title: "Musical Heritage", detail: "Ektara, Dholki, Tutari and Lejim" }
+            ]
+          },
+          "Jammu & Kashmir / Ladakh": {
+            slogan: "Crown of high mountain passes, saffron valleys and ancient monasteries.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Silk Route crossroads, Martand Temple and Hemis Gompa" },
+              { title: "Food & Flavours", detail: "Wazwan 36-course feast, Rogan josh, gushtaba and kahwa" },
+              { title: "Festivals & Faith", detail: "Hemis Tsechu, Cham mask dances and Losar New Year" },
+              { title: "Musical Heritage", detail: "Damaru cosmic drum, Santoor, Rabab and Dungchen horns" }
+            ]
+          },
+          "Telangana & Andhra Pradesh": {
+            slogan: "Pearl of the Deccan, fiery coastal spices and Kakatiya arches.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Kakatiya dynasty, Golconda Fort and Asaf Jahi Nizams" },
+              { title: "Food & Flavours", detail: "Hyderabadi dum biryani, gongura mutton and pootharekulu" },
+              { title: "Festivals & Faith", detail: "Bonalu, Bathukamma floral celebration and Ugadi" },
+              { title: "Musical Heritage", detail: "Burrakatha Dakki storytelling vessel and Veena" }
+            ]
+          },
+          "Bihar & UP": {
+            slogan: "Heartland of the sacred Ganga, Vedic philosophy and grand empires.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Mauryan Pataliputra, Nalanda University and Varanasi" },
+              { title: "Food & Flavours", detail: "Litti chokha, sattu paratha and Awadhi dum cuisine" },
+              { title: "Festivals & Faith", detail: "Chhath Puja solar vrata, Ganga Mahotsav and Dev Deepawali" },
+              { title: "Musical Heritage", detail: "Shehnai of Varanasi, Sarod and Pakhawaj" }
+            ]
+          },
+          "Chhattisgarh": {
+            slogan: "Dandakaranya forest heartland of metalcraft and sacred rivers.",
+            categories: [
+              { title: "Legends & Legacies", detail: "Kakatiya lineage and indigenous Gond-Muria heritage" },
+              { title: "Food & Flavours", detail: "Chila rice pancakes, fara and red ant chaprah chutney" },
+              { title: "Festivals & Faith", detail: "Bastar Dussehra 75-day festival for Ma Danteshwari" },
+              { title: "Musical Heritage", detail: "Korku bamboo flutes, Mandar drum and bronze bells" }
             ]
           }
         };
+
+        const CULTURAL_HERITAGE_DATA = [
+          // --- FESTIVALS OF INDIA (https://www.indianculture.gov.in/festivals-of-india) ---
+          {
+            id: "fest-bihu",
+            title: "Magh Bihu & Rongali Bihu",
+            sub: "Harvest Thanksgiving & Assamese New Year",
+            state: "Assam",
+            region: "Northeast",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Marks the conclusion of harvesting season with communal feasts (Uruka) beside Meji bamboo bonfires, welcoming spring with the Bohag Bihu dance symbolising fertility, agricultural renewal, and community harmony.",
+            history: "Rooted in Austroasiatic, Tibeto-Burman and Tai-Ahom agricultural rituals; recorded extensively in medieval Ahom Buranjis. King Rudra Singha in 1698 invited performers to the royal Rang Ghar pavilion.",
+            image: "https://images.unsplash.com/photo-1606214174585-fe31582dc6ee?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-pushkar",
+            title: "Pushkar Camel Mela & Kartik Purnima",
+            sub: "Sacred Lake Fair & Pastoral Gathering",
+            state: "Rajasthan",
+            region: "North",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Combines the world's largest historic camel and livestock trading fair with a sacred pilgrimage dip in the holy Pushkar Lake on the full moon of Kartik to seek spiritual release and blessings from Lord Brahma.",
+            history: "Ancient pilgrimage mentioned in the Mahabharata and Padma Purana; houses one of the very few surviving ancient temples dedicated to Brahma in the world, active for over two millennia.",
+            image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-hornbill",
+            title: "Hornbill Festival (Kisama Heritage)",
+            sub: "The Great Festival of Naga Festivals",
+            state: "Nagaland",
+            region: "Northeast",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Celebrated annually in the heritage village of Kisama to foster inter-tribal camaraderie and preserve indigenous warrior traditions, songs, dances, and handcrafted tribal wood carvings.",
+            history: "Named in tribute to the revered Great Indian Hornbill, celebrated in ancient Naga folklore for its bravery, vigilance, and vibrant plumage; preserves centuries of oral heritage.",
+            image: "https://images.unsplash.com/photo-1544717305-2782549b5136?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-onam",
+            title: "Onam & Vallam Kali Snake Boat Race",
+            sub: "Harvest Festival & Homecoming of King Mahabali",
+            state: "Kerala",
+            region: "South",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Commemorates the annual return of the mythical righteous King Mahabali to visit his subjects; celebrated with exquisite floral rangolis (Pookkalam), grand vegetarian Sadya feasts, and fierce 100-oar snake boat regattas.",
+            history: "Documented in Sangam literature and medieval Chera inscriptions; reflects the agrarian transition during the Malayalam month of Chingam celebrating abundance and social equality.",
+            image: "https://images.unsplash.com/photo-1609137144822-45e07bd62923?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-durga",
+            title: "Durga Puja & Dhaak Utsav",
+            sub: "UNESCO Intangible Cultural Heritage",
+            state: "West Bengal",
+            region: "East",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Ten-day public celebration commemorating the victory of Goddess Durga over Mahishasura; transformed into a massive public open-air art exhibition featuring handcrafted terracotta pandals and rhythmic Dhaak drum beats.",
+            history: "Inscribed on UNESCO's Representative List of the Intangible Cultural Heritage of Humanity in 2021. Earliest recorded grand community Baro-yaari celebrations date back to 1757 at Shovabazar Rajbari.",
+            image: "https://images.unsplash.com/photo-1569420079089-a29dcaeaae13?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-pongal",
+            title: "Pongal & Mattu Pongal",
+            sub: "Solar Thanksgiving & Cattle Veneration",
+            state: "Tamil Nadu",
+            region: "South",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "A four-day solar harvest festival thanking Surya and cattle for agricultural abundance; fresh milk and rice are boiled in earthen pots until boiling over to signify inexhaustible prosperity.",
+            history: "Dating back to the Sangam period (3rd century BCE), attested in classical Tamil epics Silappathikaram and Manimekalai as a sacred festival of the harvest season.",
+            image: "https://images.unsplash.com/photo-1548013146-72479768bada?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-baisakhi",
+            title: "Baisakhi & Giddha",
+            sub: "Wheat Harvest & Foundation of the Khalsa Panth",
+            state: "Punjab",
+            region: "North",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Celebrates the ripening of the golden rabi wheat harvest with high-energy Bhangra and Giddha folk performances, while remembering the historic founding of the Khalsa Panth in 1699.",
+            history: "Established as a monumental turning point in Indian history when Guru Gobind Singh created the order of the Khalsa at Anandpur Sahib on Vaisakhi day in 1699.",
+            image: "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-rathyatra",
+            title: "Rath Yatra of Puri",
+            sub: "Chariot Procession of Lord Jagannath",
+            state: "Odisha",
+            region: "East",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Annual sacred journey where Lord Jagannath, Balabhadra, and Subhadra emerge from the sanctum to meet all people without distinction, travelling to Gundicha Temple in immense hand-crafted chariots.",
+            history: "Described in the Skanda Purana and Ganga dynasty epigraphs; the oldest and largest annual chariot procession continuously documented for over 900 years.",
+            image: "https://images.unsplash.com/photo-1629735919597-fed920b5bd84?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-navratri",
+            title: "Navratri Garba & Rann Utsav",
+            sub: "Nine Nights of Folk Dance & Shakti Veneration",
+            state: "Gujarat",
+            region: "West",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Community celebration of Nine Nights worshipping Goddess Amba; hundreds of thousands dance in synchronised circular patterns around perforated earthen lanterns (Garbha Deep) to live folk dhol beats.",
+            history: "Tracing its origins to the ancient pastoral traditions of Krishna and Radha; recorded in Abul Fazl's Ain-i-Akbari as an unparalleled communal spectacle of western India.",
+            image: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-chhath",
+            title: "Chhath Puja Mahaparv",
+            sub: "Ancient Vedic Solar Vrata & Riverbank Offering",
+            state: "Bihar & UP",
+            region: "North",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Four-day rigorous ascetic vow dedicated to Surya and Usha; devotees stand in flowing river waters offering arghya in woven bamboo baskets (soop) with zero caste or priestly mediation.",
+            history: "Direct continuation of Rigvedic solar adoration; mentioned in the Mahabharata as practiced by Karna (ruler of Anga) and Draupadi. Noted for strict ecological purity.",
+            image: "https://images.unsplash.com/photo-1544717305-2782549b5136?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-hemis",
+            title: "Hemis Tsechu & Cham Mask Dance",
+            sub: "Sacred Himalayan Monastic Celebration",
+            state: "Jammu & Kashmir / Ladakh",
+            region: "North",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Commemorates the birth anniversary of Guru Padmasambhava; Buddhist lamas perform mystical Cham dances wearing wooden masks portraying the victory of enlightened awareness over destructive passions.",
+            history: "Instituted in the 17th century by King Sengge Namgyal and Lama Stagsang Raspa; features the ceremonial unfurling of a towering two-storey silk Thangka tapestry every 12 years.",
+            image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-bastar",
+            title: "Bastar Dussehra",
+            sub: "World's Longest 75-Day Indigenous Festival",
+            state: "Chhattisgarh",
+            region: "Central",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "A 75-day festival celebrating the supreme tribal deity Ma Danteshwari and spirits of the Sal forest; marked by massive two-tiered wooden chariots constructed without a single iron nail.",
+            history: "Commenced in the 15th century by Kakatiya King Purushottam Deo; involves active democratic participation of Maria, Muria, and Bhatra tribes across the Dandakaranya forests.",
+            image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+
+          // --- FOOD & CULTURE (https://www.indianculture.gov.in/food-and-culture) ---
+          {
+            id: "food-dalbaati",
+            title: "Dal Baati Churma & Ker Sangri",
+            sub: "Arid Desert Gastronomy & Royal Mewar Heritage",
+            state: "Rajasthan",
+            region: "North",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Created to withstand lengthy desert sieges and cavalry campaigns; slow-baked wheat dough balls submerged in golden ghee preserve for days, while wild desert berries provide deep mineral strength.",
+            history: "Originated during 8th-century military campaigns under Rawal Bappa of Mewar; later refined with crushed sweet churma and Panchmel dal across royal Marwar rasois.",
+            image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-saag",
+            title: "Sarson da Saag & Makki di Roti",
+            sub: "Agrarian Tandoori Winter Tradition",
+            state: "Punjab",
+            region: "North",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Nourishment for farming families through harsh north-Indian winters; fresh mustard leaves slow-simmered in earthen pots with bathua, ginger, and garlic, crowned with fresh white churned butter.",
+            history: "Terracotta tandoors dating back to Harappan sites (Kalibangan) show unbroken continuity of earthen flatbread and roasted grains in the five-rivers basin.",
+            image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-ilish",
+            title: "Shorshe Ilish & Mishti Doi",
+            sub: "Riverine Delta Cuisine & Clay-Pot Fermentation",
+            state: "West Bengal",
+            region: "East",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Celebrates Bengal's monsoon blessing; prized Hilsa fish steamed with freshly stone-ground mustard paste (shorshe bata) and green chilies, followed by caramelized sweet curd fermented in porous terracotta pots.",
+            history: "Mentioned in 15th-century Mangalkavya literature as sacred festival food; porous clay absorbs excess moisture to concentrate milk sugars naturally without artificial thickeners.",
+            image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-chettinad",
+            title: "Chettinad Spiced Feast & Filter Kaapi",
+            sub: "Ancient Maritime Spice-Route Gastronomy",
+            state: "Tamil Nadu",
+            region: "South",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Crafted by the seafaring Nattukottai Chettiars; features freshly stone-ground kalpasi (black stone flower), star anise, and Telicherry peppercorns to stimulate metabolic fire (Agni).",
+            history: "Refined over centuries of maritime trade with Burma, Ceylon, and Sumatra; served strictly on fresh plantain leaves following Ayurvedic principles of six tastes (Shadrasa).",
+            image: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-sadya",
+            title: "Traditional Sadya & Palada Payasam",
+            sub: "Plantain-Leaf Multi-Course Harvest Banquet",
+            state: "Kerala",
+            region: "South",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "A sacred multi-course vegetarian banquet of 24 to 28 dishes served on a single plantain leaf; features Avial, Sambar, Olan, Thoran, Kalan, and sweet jaggery-coconut milk Payasam.",
+            history: "Rooted in ancient Chera kingdom harvest customs; the specific order and leaf-placement of dishes dates back over a thousand years to optimize digestive enzymes.",
+            image: "https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-undhiyu",
+            title: "Gujarati Thali, Undhiyu & Khandvi",
+            sub: "Inverted Earthen Pot Winter Gastronomy",
+            state: "Gujarat",
+            region: "West",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Winter speciality Undhiyu (from 'undhu' meaning upside-down) where winter tubers, Surti papdi, and fenugreek muthiyas are sealed in earthen pots and slow-cooked in charcoal embers underground.",
+            history: "Centered on Jain and Vaishnava philosophies of non-violence (Ahimsa); masters the intricate equilibrium of sweet, sour, spicy, and bitter in a single meal.",
+            image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-masortenga",
+            title: "Masor Tenga & Khaar",
+            sub: "River Brahmaputra Indigenous Culinary Heritage",
+            state: "Assam",
+            region: "Northeast",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "A light, sour fish broth prepared with elephant apple (ou tenga) or tomatoes to cool the body during tropical summers; paired with alkaline Khaar filtered from sun-dried banana peel ashes.",
+            history: "Documented in ancient Assamese texts and Tai-Ahom medicinal scrolls for balancing bodily humors and promoting gut health.",
+            image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-wazwan",
+            title: "Kashmiri Wazwan: Rogan Josh & Gushtaba",
+            sub: "Royal 36-Course Master Craftsmanship",
+            state: "Jammu & Kashmir / Ladakh",
+            region: "North",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Cooked by master hereditary chefs (Wazas); mutton slow-simmered with Kashmiri shallots (pran), dried cockscomb flower (maval) for ruby-red hue, fennel, and pure saffron threads.",
+            history: "Brought to peak sophistication in the 14th century under Sultan Sikandar and Central Asian craft guilds; served communally in large engraved copper platters (Traem).",
+            image: "https://images.unsplash.com/photo-1545247181-516773cae754?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-chhenapoda",
+            title: "Chhena Poda & Dalma",
+            sub: "India's First Baked Cheese & Jagannath Mahaprasad",
+            state: "Odisha",
+            region: "East",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "India's indigenous baked dessert made by kneading fresh cottage cheese (chhena) with cardamom and jaggery, wrapped in sal leaves and baked overnight in hearth embers until caramelised.",
+            history: "Originating in Nayagarh in the early 20th century, sharing culinary DNA with the millennia-old Chhappan Bhog (56 offerings) of the Puri Jagannath Temple.",
+            image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-biryani",
+            title: "Hyderabadi Dum Biryani & Gongura Mutton",
+            sub: "Royal Asaf Jahi Dum Pukht & Deccan Herbs",
+            state: "Telangana & Andhra Pradesh",
+            region: "South",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Long-grain basmati and marinated meat sealed with dough in heavy handis and cooked slowly over wood embers (dum pukht); paired with tangy, iron-rich sorrel leaves (gongura).",
+            history: "Refined in the royal kitchens of the Nizams of Hyderabad, fusing Persian and Mughal cooking techniques with fiery Andhra chilies and native spices.",
+            image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+
+          // --- MUSICAL INSTRUMENTS OF INDIA (https://www.indianculture.gov.in/musical-instruments-of-india) ---
+          {
+            id: "inst-tambura",
+            title: "Bhajan Tambura",
+            sub: "Tat Vadya · Chordophone Drone Instrument",
+            state: "Tamil Nadu",
+            region: "South",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Plucked string drone instrument crafted from jackwood, brass strings, and celluloid; provides the foundational continuous acoustic pitch (Shruti) for Carnatic recitals and devotional bhajans.",
+            history: "Classified as Tat Vadya in Bharata Muni's Natya Shastra (c. 200 BCE – 200 CE); revered as the sonic bedrock of Indian classical melody.",
+            image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-bhapang",
+            title: "Bhapang / Apang Plucked Drum",
+            sub: "Tat Vadya · Variable-Pitch Talking Chordophone",
+            state: "Rajasthan",
+            region: "North",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Tucked under the armpit while plucking a single gut string with variable finger tension; produces hypnotic, talking percussive tones to accompany the heroic ballads of Mewati Jogis.",
+            history: "Ancient single-stringed instrument documented in folk chronicles of the Mewat region, celebrated for its unique vocal mimicry and acoustic elasticity.",
+            image: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-sarangi",
+            title: "Dhani Sarangi Bowed Lute",
+            sub: "Tat Vadya · 39 Sympathetic Resonating Strings",
+            state: "Rajasthan",
+            region: "North",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Carved from a single block of seasoned wood and played by sliding cuticles against gut strings; celebrated across Indian music as the instrument that most faithfully reproduces the emotional nuance of the human voice.",
+            history: "Derived from 'Sau Rang' (a hundred colours); documented across North Indian courts as the premier melodic accompanist to classical Khayal and Dhrupad singing.",
+            image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-veena",
+            title: "Saraswati Veena",
+            sub: "Tat Vadya · Ancient 24-Fret Plucked Lute",
+            state: "Karnataka & Tamil Nadu",
+            region: "South",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Ancient 24-fret plucked lute featuring a carved dragon (yali) head and hollow jackwood resonator; the primary solo instrument of South Indian classical Carnatic music.",
+            history: "Described in the Sama Veda and Natya Shastra; perfected in the 17th century by Govinda Dikshitar under the royal patronage of the Nayak rulers of Thanjavur.",
+            image: "https://images.unsplash.com/photo-1520523839898-507121c21069?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-khamak",
+            title: "Khamak / Anandalahari",
+            sub: "Avanaddha Vadya · Baul Mystic Tension Drum",
+            state: "West Bengal",
+            region: "East",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Rhythmic string-tension drum held under the left arm; pulling the string taut with one hand while plucking with a wooden plectrum creates elastic, sliding rhythmic sweeps essential to Baul spiritual poetry.",
+            history: "Avanaddha-Tat hybrid instrument documented in medieval Bengali Sahajiya Buddhist texts; central to Bengal's living UNESCO oral heritage.",
+            image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-bom",
+            title: "Bom Khasi Kettle Drum",
+            sub: "Avanaddha Vadya · Great Tribal Council Drum",
+            state: "Meghalaya",
+            region: "Northeast",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Colossal single-headed kettle drum crafted from hollowed softwood trunk and stretched cowhide; struck with heavy mallets during state assemblies, warrior summons, and harvest dances in the Khasi Hills.",
+            history: "Centuries-old tribal instrument representing democratic sovereignty of Khasi village Dorbars (councils), sounded across mist-shrouded valleys.",
+            image: "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-damaru",
+            title: "Damaru Hourglass Drum",
+            sub: "Avanaddha Vadya · Sacred Cosmic Rhythm Vessel",
+            state: "Jammu & Kashmir / Ladakh",
+            region: "North",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Hourglass-shaped double-headed drum played by twisting the wrist so knotted string balls strike both skins; used in Tantric monastic rituals and wandering Shaivite devotional performances.",
+            history: "Iconic emblem of Lord Shiva, representing the primordial sonic vibration (Nada-Brahma) from which the Sanskrit alphabet emerged in the Natya Shastra.",
+            image: "https://images.unsplash.com/photo-1544717305-2782549b5136?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-mridangam",
+            title: "Mridangam Concert Drum",
+            sub: "Avanaddha Vadya · Master Carnatic Percussion",
+            state: "Tamil Nadu",
+            region: "South",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Two-headed barrel drum tuned with black iron-paste (karanai); produces multi-tonal acoustic harmonics and complex mathematical rhythmic cycles (Talas) in classical Carnatic concerts.",
+            history: "Mentioned in the Ramayana, Mahabharata, and Silappathikaram; literally translates from Sanskrit as 'body made of clay' (Mrida-Angam).",
+            image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-kali",
+            title: "Kali Procession Horn",
+            sub: "Sushir Vadya · Aerophone Double-Reed Trumpet",
+            state: "Assam",
+            region: "Northeast",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Conical wooden tube with fingerholes and a wide brass bell; blown with circular breathing to yield piercing, joyous melodies during Assamese royal processions and traditional weddings.",
+            history: "Preserved in the royal courts of the Ahom kingdom as an auspicious ceremonial wind instrument of state.",
+            image: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-shehnai",
+            title: "Shehnai Double-Reed Oboe",
+            sub: "Sushir Vadya · Auspicious Temple & Concert Horn",
+            state: "Bihar & UP",
+            region: "North",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Auspicious wind instrument made of seasoned dark wood with a flared brass bell; believed to bring divine blessings (Mangala Vadya) at temple gates and weddings.",
+            history: "Played as part of the royal Naubat (nine-instrument court ensemble); elevated to the world's most prestigious concert halls by Bharat Ratna Ustad Bismillah Khan.",
+            image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-bansuri",
+            title: "Bansuri Bamboo Transverse Flute",
+            sub: "Sushir Vadya · Ancient Six-Hole Flute",
+            state: "Pan-India",
+            region: "North & South",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Transverse flute crafted from a single natural hollow bamboo culm without keys or reeds; player uses subtle breath control and finger half-shading to create microtonal glides (meend).",
+            history: "One of the oldest instruments in world civilization; documented in the Rigveda as Venu and eternally associated with Lord Krishna in ancient Vrindavan lore.",
+            image: "https://images.unsplash.com/photo-1520523839898-507121c21069?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-ganilauri",
+            title: "Ganilauri Kutia Kond Rhythm Wood",
+            sub: "Ghan Vadya · Rare Idiophone of Odisha",
+            state: "Odisha",
+            region: "East",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Solid tuned wood bar instrument carved from native light timber by the Kutia Kond tribe; struck with wooden mallets to maintain trance-inducing rhythmic timing during sacred dances.",
+            history: "Categorised under Ghan Vadya in Natya Shastra as a self-vibrating instrument needing no tuning strings or skins, preserved in deep tribal forest heritage.",
+            image: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-ghatam",
+            title: "Ghatam High-Fired Clay Pot",
+            sub: "Ghan Vadya · Ceramic Percussion Vessel",
+            state: "Tamil Nadu",
+            region: "South",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Specially baked clay pot with iron and brass filings played by striking the mouth, neck, and belly with the fingers, thumbs, and palm to generate sparkling metallic resonance.",
+            history: "Mentioned in the Valmiki Ramayana; one of the oldest percussion instruments in South India, requiring master pottery craftsmanship in Manamadurai.",
+            image: "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          // --- Additional States: Festivals, Food & Culture, Musical Instruments ---
+          {
+            id: "fest-ganesh",
+            title: "Ganesh Chaturthi & Dhol Tasha",
+            sub: "Sarvajanik Ganeshotsav & Historic Rhythm Formations",
+            state: "Maharashtra",
+            region: "West",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "A 10-day community celebration venerating Lord Ganesha, marked by sacred clay idol immersion (Visarjan) accompanied by massive 100-member synchronised Dhol-Tasha-Dhvaj percussion pathaks.",
+            history: "Transformed in 1893 by freedom fighter Lokmanya Bal Gangadhar Tilak from a private household worship into a historic mass social mobilization movement against British colonial rule.",
+            image: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-dasara",
+            title: "Mysuru Dasara Jamboo Savari",
+            sub: "Royal Elephant Procession & Palace Illumination",
+            state: "Karnataka",
+            region: "South",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Celebrates Goddess Chamundeshwari's victory over Mahishasura; the golden 750-kilogram golden howdah (Chinnada Ambari) carrying the deity is borne by a lead tusker elephant through illuminated royal streets.",
+            history: "Initiated by the Vijayanagara Empire kings in the 14th century, continued without interruption by Raja Wadiyar I of the Kingdom of Mysore starting in 1610 CE.",
+            image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-khajuraho",
+            title: "Khajuraho Dance Festival & Bhagoria",
+            sub: "Classical Temple Dances & Tribal Harvest Celebration",
+            state: "Madhya Pradesh",
+            region: "Central",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Celebrated against the floodlit backdrop of the UNESCO World Heritage Western Group of Temples, presenting India's major classical dance traditions alongside the indigenous Bhagoria Haat of Bhil tribes.",
+            history: "Started in 1975 to revive classical temple art forms beside the 10th-century Chandela dynasty stone architectural masterpieces.",
+            image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-kullu",
+            title: "Kullu Dussehra & Deva Congregation",
+            sub: "Week-Long Assembly of 200+ Himalayan Village Deities",
+            state: "Himachal Pradesh",
+            region: "North",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "Commences on Vijaya Dashami when Dussehra concludes elsewhere; over 200 palanquins of local devatas from remote Himalayan valleys gather at Dhalpur Maidan to pay homage to Lord Raghunath.",
+            history: "Instituted in 1660 CE by Raja Jagat Singh of Kullu after consecrating the idol of Lord Raghunath brought from Ayodhya.",
+            image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "fest-shigmo",
+            title: "Shigmo Festival (Shigmotsav)",
+            sub: "Goan Spring Harvest & Warrior Welcome",
+            state: "Goa",
+            region: "West",
+            category: "festivals",
+            categoryLabel: "Festivals of India",
+            purpose: "A 14-day spring harvest festival honoring returning warriors who fought invaders; features traditional folk dances like Ghode Modni (horse dance), Fugdi, and Romtamel with vibrant costumes.",
+            history: "Pre-Portuguese Hindu agrarian festival documented across Konkan folk traditions, preserved through centuries of coastal history.",
+            image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+          },
+          {
+            id: "food-puranpoli",
+            title: "Puran Poli & Pithla Bhakri",
+            sub: "Maratha Cavalry Trail Ration & Festive Sweet Flatbread",
+            state: "Maharashtra",
+            region: "West",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Chana dal slow-cooked with jaggery, nutmeg, and cardamom stuffed inside delicate whole-wheat dough and roasted with ghee; paired with hearty gram-flour pithla and sorghum bhakri.",
+            history: "Described in the 12th-century Sanskrit encyclopaedia Manasollasa composed by Western Chalukya King Someshvara III; sustained Shivaji's guerrilla infantry across rugged Western Ghats forts.",
+            image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-bisibelebath",
+            title: "Bisi Bele Bath & Mysore Pak",
+            sub: "Royal Palace Kitchens of Mysore & Spiced Lentil Rice",
+            state: "Karnataka",
+            region: "South",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Hot lentil rice slow-cooked with tamarind, nutmeg, Marathi moggu, and 30-spice blend with ghee-roasted cashews; followed by melt-in-mouth Mysore Pak crafted from gram flour, pure ghee, and sugar syrup.",
+            history: "Developed in the royal palace kitchens (Rasoi) of the Wadiyars of Mysore under Maharaja Krishnaraja Wadiyar IV by chief royal cook Kakasura Madappa.",
+            image: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-bhutte",
+            title: "Bhutte ka Kees & Dal Bafla",
+            sub: "Malwa Plateau Grated Corn & Hearth-Baked Wheat",
+            state: "Madhya Pradesh",
+            region: "Central",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Tender local corn grated and tempered with mustard seeds, asafoetida, green chilies, and simmered slowly in whole milk, topped with freshly grated coconut and coriander.",
+            history: "Centuries-old culinary innovation of Indore and Malwa region utilizing the abundant monsoon corn harvest of central India's black soil plains.",
+            image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-siddu",
+            title: "Siddu with Pure Ghee & Chha Gosht",
+            sub: "Himalayan High-Altitude Fermented Wheat Bread",
+            state: "Himachal Pradesh",
+            region: "North",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Yeast-fermented whole wheat dough stuffed with crushed walnuts, poppy seeds, and roasted spices, steamed over boiling water and dipped generously into molten desi ghee.",
+            history: "Indispensable high-calorie mountain preparation devised to sustain pastoral Gaddi shepherds through sub-zero Himalayan winters.",
+            image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "food-goanfish",
+            title: "Goan Fish Curry with Kokum & Bebinca",
+            sub: "Konkan Coastal Kokum Broth & 7-Layered Royal Dessert",
+            state: "Goa",
+            region: "West",
+            category: "food",
+            categoryLabel: "Food & Culture",
+            purpose: "Fresh coastal catch stewed in a velvet coconut-milk gravy soured with sun-dried kokum rinds (bhindim) and Kashmiri chilies; paired with Bebinca, a rich 7-layer baked coconut milk pudding.",
+            history: "Living fusion of ancient Saraswat coastal seafood traditions with 450 years of Portuguese culinary influence along the Arabian Sea trade routes.",
+            image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/food-and-culture"
+          },
+          {
+            id: "inst-tutari",
+            title: "Tutari / Shringa Curved Trumpet",
+            sub: "Sushir Vadya · Royal Maratha Military Horn",
+            state: "Maharashtra",
+            region: "West",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Curved crescent-shaped brass wind horn sounded during royal coronation ceremonies, religious processions, and historic battle summons across the Sahyadri mountains.",
+            history: "An emblem of sovereign Maratha identity during the reign of Chhatrapati Shivaji Maharaj; classified as Sushir Vadya in the Natya Shastra.",
+            image: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-maddale",
+            title: "Maddale Yakshagana Drum",
+            sub: "Avanaddha Vadya · Epic Theatre Percussion",
+            state: "Karnataka",
+            region: "South",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Heavy barrel-shaped two-headed drum carved from jackfruit wood, tuned with rice paste and manganese powder; leads the dramatic rhythm of coastal Yakshagana dance-theatre.",
+            history: "Integral percussion instrument belonging to the Maddalam lineage described in medieval Kannada and Sanskrit musical treatises.",
+            image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-ransingha",
+            title: "Ransingha S-Shaped Horn",
+            sub: "Sushir Vadya · Himalayan Temple & Procession Horn",
+            state: "Himachal Pradesh",
+            region: "North",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Large two-piece S-curved copper horn producing deep, echoing resonant calls across high mountain valleys during devata processions and festive fairs.",
+            history: "Millennia-old wind instrument of the Western Himalayas depicted in early medieval pahari temple reliefs and royal chronicles.",
+            image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          },
+          {
+            id: "inst-ghumot",
+            title: "Ghumot Heritage Earthen Pot Drum",
+            sub: "Avanaddha Vadya · Declared State Heritage Instrument",
+            state: "Goa",
+            region: "West",
+            category: "instruments",
+            categoryLabel: "Musical Instruments",
+            purpose: "Earthen pot percussion instrument with both mouth openings covered with goatskin or synthetic membrane; played with finger slaps and base vibrations during Zagor, Dhalo, and Aarti.",
+            history: "Officially declared the Heritage Musical Instrument of Goa in 2019; dates back to ancient Konkan village communities.",
+            image: "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://www.indianculture.gov.in/musical-instruments-of-india"
+          }
+        ];
 
         const cultureChanges = [
           { id: "currency", title: "Currency", then: "Silver rupee", now: "Digital rupee", note: "From hand-struck imperial coins to instant digital exchange." },
@@ -1361,7 +2728,7 @@
         const visitModes = [
           { id: "model", title: "Interactive 3D", detail: "Rotate, zoom and open historical hotspots", icon: "cube" },
           { id: "video", title: "3D Video Walkthrough", detail: "Watch a guided cinematic journey", icon: "play" },
-          { id: "maps", title: "Google Maps 3D Visit", detail: "Explore the monument and its surroundings", icon: "map" }
+          { id: "maps", title: "Google 3D Street View", detail: "Explore the monument and 360° street view", icon: "map" }
         ];
 
         // --- Application State ---
@@ -1372,10 +2739,15 @@
         let selectedDynasty = dynasties[0];
         let isPlaying = false;
         let selectedState = "Rajasthan";
-        let selectedCultureCategory = stateCultures["Rajasthan"].categories[0];
+        let selectedCultureCategory = stateCultures["Rajasthan"] ? stateCultures["Rajasthan"].categories[0] : null;
         let selectedComparison = cultureChanges[0];
         let isScanning = false;
         let scanComplete = false;
+        let panelCultureCat = "all";
+        let panelCultureQuery = "";
+        let activeHeritageCat = "all";
+        let activeHeritageState = "All States";
+        let heritageSearchQuery = "";
 
         // --- Render Feature Grid ---
         const featureCardsGrid = document.getElementById("feature-cards-grid");
@@ -1491,6 +2863,7 @@
               updateModelBadge();
               update3DLabels();
               changeBackdrop();
+              openFullscreenViewer(selectedMonument, visitMode);
             });
             container.appendChild(btn);
           });
@@ -1499,7 +2872,7 @@
         function update3DLabels() {
           document.getElementById("visit-mode-label").textContent = `Choose how to experience ${selectedMonument.name}`;
           const launchBtn = document.getElementById("launch-visit-btn");
-          launchBtn.textContent = (visitMode === "model") ? "Launch 3D model" : (visitMode === "video" ? "Play walkthrough" : "Open 3D map visit");
+          launchBtn.textContent = (visitMode === "model") ? "Launch 3D model" : (visitMode === "video" ? "Play walkthrough" : "Open 3D Street View");
         }
 
         // Monument Search Filter
@@ -1543,20 +2916,110 @@
           }
         });
 
-        // 3D Launch Action Modal
+        // --- Fullscreen 3D & Street View Viewer Logic ---
         const viewerModal = document.getElementById("viewer-modal");
+        const modalBox = document.getElementById("modal-window-box");
         const modalCloseBtn = document.getElementById("modal-close-btn");
-        document.getElementById("launch-visit-btn").addEventListener("click", () => {
-          document.getElementById("modal-monument-name").textContent = `${selectedMonument.name} — ${visitModes.find(v => v.id === visitMode).title}`;
-          document.getElementById("modal-preview-screen").style.backgroundImage = `url("${selectedMonument.image}")`;
-          document.getElementById("modal-monument-era").textContent = `${selectedMonument.place} · ${selectedMonument.dynasty} (${selectedMonument.year})`;
-          document.getElementById("modal-mode-badge").innerHTML = `<span>${visitMode.toUpperCase()} ACTIVE · ${selectedMonument.hotspots} VERIFIED ARCHIVAL POINTS</span>`;
+        const modalFullscreenBtn = document.getElementById("modal-fullscreen-btn");
+        const modalViewportFrame = document.getElementById("modal-viewport-frame");
+        const modalStreetviewBanner = document.getElementById("modal-streetview-banner");
+        const modalStreetviewBtn = document.getElementById("modal-streetview-btn");
+        const modalSourceLink = document.getElementById("modal-source-link");
+
+        function openFullscreenViewer(monument, mode) {
+          if (!monument) monument = selectedMonument;
+          if (!mode) mode = visitMode;
+          visitMode = mode;
+          selectedMonument = monument;
+
+          renderVisitModes();
+          updateModelBadge();
+          update3DLabels();
+
+          const nameHeading = document.getElementById("modal-monument-name");
+          const eraBadge = document.getElementById("modal-monument-era");
+          const footerHotspots = document.getElementById("modal-footer-hotspots");
+          const footerDynasty = document.getElementById("modal-footer-dynasty");
+          const footerNotes = document.getElementById("modal-footer-notes");
+
+          // Ensure fullscreen mode
+          viewerModal.classList.add("is-fullscreen");
+          modalBox.classList.add("fullscreen-mode");
+
+          // Update header details
+          eraBadge.textContent = `${monument.place} · ${monument.dynasty} (${monument.year})`;
+          footerHotspots.textContent = `✦ ${monument.hotspots} Verified Archival Hotspots`;
+          footerDynasty.textContent = `Dynasty: ${monument.dynasty}`;
+
+          // Highlight active mode tab in modal
+          document.querySelectorAll(".modal-mode-tab").forEach(tab => {
+            tab.classList.toggle("is-active", tab.dataset.mode === mode);
+          });
+
+          if (mode === "model") {
+            nameHeading.textContent = `${monument.name} — Interactive 3D Model`;
+            modalViewportFrame.src = monument.modelEmbed || "";
+            modalStreetviewBanner.style.display = "none";
+            modalSourceLink.href = monument.modelUrl || "#";
+            modalSourceLink.textContent = monument.modelUrl?.includes("tripo3d") ? "Open Tripo3D Source ↗" : "Open Sketchfab Source ↗";
+            footerNotes.textContent = "Photogrammetry 3D Mesh · Interactive Realtime Render";
+          } else if (mode === "video") {
+            nameHeading.textContent = `${monument.name} — 3D Video Walkthrough`;
+            modalViewportFrame.src = monument.videoEmbedUrl || "";
+            modalStreetviewBanner.style.display = "none";
+            modalSourceLink.href = monument.videoEmbedUrl ? monument.videoEmbedUrl.replace("embed/", "watch?v=").replace("?autoplay=1", "") : "#";
+            modalSourceLink.textContent = "Watch on YouTube ↗";
+            footerNotes.textContent = "Curated Cinematic Walkthrough · 4K Drone & Interior Archive";
+          } else if (mode === "maps") {
+            nameHeading.textContent = `${monument.name} — Google 3D Street View`;
+            modalViewportFrame.src = monument.mapsEmbedUrl || "";
+            modalStreetviewBanner.style.display = "flex";
+            modalStreetviewBtn.href = monument.streetViewUrl || "#";
+            modalSourceLink.href = monument.streetViewUrl || monument.mapsEmbedUrl || "#";
+            modalSourceLink.textContent = "Launch Street View ↗";
+            footerNotes.textContent = "Google Arts & Culture 360° Street View & Satellite Photogrammetry";
+          }
+
           viewerModal.classList.add("is-open");
+        }
+
+        function closeFullscreenViewer() {
+          viewerModal.classList.remove("is-open");
+          if (modalViewportFrame) {
+            modalViewportFrame.src = ""; // Clear src to stop audio / WebGL context
+          }
+        }
+
+        // Mode tabs click inside the modal
+        document.querySelectorAll(".modal-mode-tab").forEach(tab => {
+          tab.addEventListener("click", () => {
+            const nextMode = tab.dataset.mode;
+            openFullscreenViewer(selectedMonument, nextMode);
+          });
         });
-        modalCloseBtn.addEventListener("click", () => viewerModal.classList.remove("is-open"));
-        viewerModal.addEventListener("click", (e) => {
-          if (e.target === viewerModal) viewerModal.classList.remove("is-open");
+
+        // Toggle Fullscreen button inside modal header
+        modalFullscreenBtn?.addEventListener("click", () => {
+          viewerModal.classList.toggle("is-fullscreen");
+          modalBox.classList.toggle("fullscreen-mode");
         });
+
+        modalCloseBtn?.addEventListener("click", closeFullscreenViewer);
+        viewerModal?.addEventListener("click", (e) => {
+          if (e.target === viewerModal) closeFullscreenViewer();
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && viewerModal.classList.contains("is-open")) {
+            closeFullscreenViewer();
+          }
+        });
+
+        document.getElementById("launch-visit-btn")?.addEventListener("click", () => {
+          openFullscreenViewer(selectedMonument, visitMode);
+        });
+
+        window.openFullscreenViewer = openFullscreenViewer;
 
         // --- AI Storyteller Logic ---
         const storySearchInput = document.getElementById("story-search-input");
@@ -1637,39 +3100,285 @@
           window.speechSynthesis.speak(utterance);
         }
 
-        // --- State Culture Logic ---
+        // --- Cultural Item Archival Modal Logic ---
+        function openCulturalDetailModal(itemOrId) {
+          const item = typeof itemOrId === "string" ? CULTURAL_HERITAGE_DATA.find(x => x.id === itemOrId) : itemOrId;
+          if (!item) return;
+          const modal = document.getElementById("cultural-detail-modal");
+          if (!modal) return;
+
+          document.getElementById("cultural-modal-title").textContent = item.title;
+          document.getElementById("cultural-modal-badge").textContent = `${item.state} · ${item.categoryLabel}`;
+          const imgEl = document.getElementById("cultural-modal-image");
+          if (imgEl) {
+            imgEl.src = item.image;
+            imgEl.alt = item.title;
+          }
+          document.getElementById("cultural-modal-heading").textContent = item.title;
+          document.getElementById("cultural-modal-sub").textContent = `${item.sub} · Region: ${item.region} India`;
+          document.getElementById("cultural-modal-purpose").textContent = item.purpose;
+          document.getElementById("cultural-modal-history").textContent = item.history;
+
+          const sourceBtn = document.getElementById("cultural-modal-source-btn");
+          if (sourceBtn) {
+            sourceBtn.href = item.sourceUrl;
+            sourceBtn.textContent = `Open Official Record on ${item.categoryLabel} Portal ↗`;
+          }
+
+          modal.classList.add("is-open");
+        }
+        window.openCulturalDetailModal = openCulturalDetailModal;
+
+        function closeCulturalDetailModal() {
+          const modal = document.getElementById("cultural-detail-modal");
+          if (modal) modal.classList.remove("is-open");
+        }
+        window.closeCulturalDetailModal = closeCulturalDetailModal;
+
+        document.getElementById("cultural-modal-close-btn")?.addEventListener("click", closeCulturalDetailModal);
+        document.getElementById("cultural-detail-modal")?.addEventListener("click", (e) => {
+          if (e.target.id === "cultural-detail-modal") closeCulturalDetailModal();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeCulturalDetailModal();
+        });
+
+        // --- State Culture Module Logic (Experience Module Feature 03) ---
         function renderStateCulture() {
+          // 1. Render State Buttons
           const statePickerContainer = document.getElementById("state-picker-buttons");
-          statePickerContainer.innerHTML = "";
-          Object.keys(stateCultures).forEach(st => {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = (st === selectedState) ? "selected" : "";
-            btn.textContent = st;
-            btn.addEventListener("click", () => {
-              selectedState = st;
-              selectedCultureCategory = stateCultures[st].categories[0];
-              renderStateCulture();
-              changeBackdrop();
+          if (statePickerContainer) {
+            statePickerContainer.innerHTML = "";
+            Object.keys(stateCultures).forEach(st => {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = (st === selectedState) ? "selected" : "";
+              btn.textContent = st;
+              btn.addEventListener("click", () => {
+                selectedState = st;
+                renderStateCulture();
+                changeBackdrop();
+              });
+              statePickerContainer.appendChild(btn);
             });
-            statePickerContainer.appendChild(btn);
+          }
+
+          // 2. State Slogan Quote
+          const sloganEl = document.getElementById("state-slogan-quote");
+          if (sloganEl && stateCultures[selectedState]) {
+            sloganEl.textContent = `“${stateCultures[selectedState].slogan}”`;
+          }
+
+          // 3. Category Buttons in Panel
+          const catNav = document.getElementById("culture-panel-cat-nav");
+          if (catNav) {
+            catNav.querySelectorAll(".heritage-cat-btn").forEach(btn => {
+              const cat = btn.dataset.cat;
+              btn.classList.toggle("is-active", cat === panelCultureCat);
+              btn.onclick = () => {
+                panelCultureCat = cat;
+                renderStateCulture();
+              };
+            });
+          }
+
+          // 4. Populate Items Grid in Experience Panel
+          const itemsGrid = document.getElementById("culture-panel-items-grid");
+          if (itemsGrid) {
+            itemsGrid.innerHTML = "";
+            const q = panelCultureQuery.trim().toLowerCase();
+
+            const matched = CULTURAL_HERITAGE_DATA.filter(item => {
+              const matchesState = q ? true : (item.state === selectedState || item.state.includes(selectedState) || selectedState.includes(item.state));
+              const matchesCat = (panelCultureCat === "all" || item.category === panelCultureCat);
+              const matchesQuery = !q || (
+                item.title.toLowerCase().includes(q) ||
+                item.sub.toLowerCase().includes(q) ||
+                item.state.toLowerCase().includes(q) ||
+                item.purpose.toLowerCase().includes(q) ||
+                item.history.toLowerCase().includes(q)
+              );
+              return matchesState && matchesCat && matchesQuery;
+            });
+
+            if (matched.length === 0) {
+              const stateInfo = stateCultures[selectedState];
+              if (stateInfo && stateInfo.categories && !q) {
+                stateInfo.categories.forEach(cat => {
+                  const card = document.createElement("div");
+                  card.className = "culture-panel-card";
+                  card.innerHTML = `
+                    <div class="culture-panel-card-info" style="padding: 4px 6px;">
+                      <strong>${cat.title}</strong>
+                      <span>${selectedState} Heritage</span>
+                      <p>${cat.detail}</p>
+                    </div>
+                  `;
+                  itemsGrid.appendChild(card);
+                });
+              } else {
+                itemsGrid.innerHTML = `<p style="grid-column: 1 / -1; color: #baa98f; font-size: 13px; text-align: center; padding: 24px;">No cultural records found matching your query. Explore the full repository below.</p>`;
+              }
+            } else {
+              matched.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "culture-panel-card";
+                card.style.cursor = "pointer";
+                card.innerHTML = `
+                  <img src="${item.image}" alt="${item.title}" loading="lazy" />
+                  <div class="culture-panel-card-info">
+                    <strong>${item.title}</strong>
+                    <span>${item.categoryLabel} · ${item.state}</span>
+                    <p>${item.purpose.slice(0, 95)}…</p>
+                  </div>
+                `;
+                card.addEventListener("click", () => openCulturalDetailModal(item));
+                itemsGrid.appendChild(card);
+              });
+            }
+          }
+        }
+
+        // Panel Search Input listener
+        const panelSearchInput = document.getElementById("culture-search-panel-input");
+        if (panelSearchInput) {
+          panelSearchInput.addEventListener("input", (e) => {
+            panelCultureQuery = e.target.value;
+            renderStateCulture();
+          });
+        }
+
+        // --- National Living Heritage Repository Logic (All States Search & Filter) ---
+        function renderHeritageRepository() {
+          const pillsContainer = document.getElementById("heritage-state-pills");
+          const itemsGrid = document.getElementById("heritage-items-grid");
+          const catNav = document.getElementById("heritage-category-nav");
+          if (!itemsGrid) return;
+
+          // Compute list of unique states
+          const statesSet = new Set();
+          CULTURAL_HERITAGE_DATA.forEach(d => {
+            if (d.state && d.state !== "Pan-India") statesSet.add(d.state);
+          });
+          const allStatesList = ["All States", ...Array.from(statesSet).sort()];
+
+          // Render State Pills
+          if (pillsContainer) {
+            pillsContainer.innerHTML = "";
+            allStatesList.forEach(st => {
+              const pill = document.createElement("button");
+              pill.type = "button";
+              pill.className = `heritage-state-pill ${st === activeHeritageState ? "is-active" : ""}`;
+              pill.textContent = st;
+              pill.addEventListener("click", () => {
+                activeHeritageState = st;
+                renderHeritageRepository();
+              });
+              pillsContainer.appendChild(pill);
+            });
+          }
+
+          // Category nav buttons binding
+          if (catNav) {
+            catNav.querySelectorAll(".heritage-cat-btn").forEach(btn => {
+              const cat = btn.dataset.cat;
+              btn.classList.toggle("is-active", cat === activeHeritageCat);
+              btn.onclick = () => {
+                activeHeritageCat = cat;
+                renderHeritageRepository();
+              };
+            });
+          }
+
+          // Filter Data
+          const q = heritageSearchQuery.trim().toLowerCase();
+          const filtered = CULTURAL_HERITAGE_DATA.filter(item => {
+            const matchesCat = (activeHeritageCat === "all" || item.category === activeHeritageCat);
+            const matchesState = (activeHeritageState === "All States" || item.state === activeHeritageState || item.state.includes(activeHeritageState));
+            const matchesQuery = !q || (
+              item.title.toLowerCase().includes(q) ||
+              item.sub.toLowerCase().includes(q) ||
+              item.state.toLowerCase().includes(q) ||
+              item.region.toLowerCase().includes(q) ||
+              item.purpose.toLowerCase().includes(q) ||
+              item.history.toLowerCase().includes(q)
+            );
+            return matchesCat && matchesState && matchesQuery;
           });
 
-          document.getElementById("state-slogan-quote").textContent = `“${stateCultures[selectedState].slogan}”`;
-          const categoriesGrid = document.getElementById("culture-categories-grid");
-          categoriesGrid.innerHTML = "";
+          // Render Grid
+          itemsGrid.innerHTML = "";
+          if (filtered.length === 0) {
+            itemsGrid.innerHTML = `
+              <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(240,232,219,0.15);">
+                <p style="font-family: 'Playfair Display', serif; font-size: 22px; color: #f0e8db; margin-bottom: 8px;">No Cultural Records Found</p>
+                <p style="color: #baa98f; font-size: 14px; max-width: 500px; margin: 0 auto 18px;">
+                  We couldn’t find any festivals, culinary dishes, or musical instruments matching “${heritageSearchQuery}” in ${activeHeritageState}.
+                </p>
+                <button type="button" class="heritage-cat-btn" style="display: inline-block; cursor: pointer;" onclick="window.resetHeritageFilters()">
+                  Reset Search &amp; Show All
+                </button>
+              </div>
+            `;
+            return;
+          }
 
-          stateCultures[selectedState].categories.forEach(cat => {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = (cat.title === selectedCultureCategory.title) ? "selected" : "";
-            btn.innerHTML = `<strong>${cat.title}</strong><span>${cat.detail}</span>`;
-            btn.addEventListener("click", () => {
-              selectedCultureCategory = cat;
-              renderStateCulture();
-              changeBackdrop();
-            });
-            categoriesGrid.appendChild(btn);
+          filtered.forEach(item => {
+            const card = document.createElement("article");
+            card.className = "heritage-card";
+            card.innerHTML = `
+              <div class="heritage-card-media" style="cursor: pointer;" title="Click to inspect archival record">
+                <img src="${item.image}" alt="${item.title}" loading="lazy" />
+                <div class="heritage-badge-stack">
+                  <span class="heritage-badge cat-badge">${item.categoryLabel}</span>
+                  <span class="heritage-badge state-badge">${item.state}</span>
+                </div>
+              </div>
+              <div class="heritage-card-content">
+                <h3 class="heritage-card-title">${item.title}</h3>
+                <p class="heritage-card-sub">${item.sub} · ${item.region} India</p>
+                <div class="heritage-card-purpose">
+                  <strong>✦ Purpose &amp; Cultural Meaning:</strong>
+                  <p>${item.purpose}</p>
+                </div>
+                <div class="heritage-card-history">
+                  <strong>📜 Archival Record ("hius data"):</strong>
+                  <p>${item.history}</p>
+                </div>
+                <div class="heritage-card-footer">
+                  <button type="button" class="heritage-explore-btn">
+                    View Archival Record ↗
+                  </button>
+                  <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="heritage-portal-link" title="Open official Ministry of Culture portal record">
+                    Portal ↗
+                  </a>
+                </div>
+              </div>
+            `;
+
+            // Open modal on clicking "View Archival Record" or clicking the image
+            card.querySelector(".heritage-explore-btn").addEventListener("click", () => openCulturalDetailModal(item));
+            card.querySelector(".heritage-card-media").addEventListener("click", () => openCulturalDetailModal(item));
+            itemsGrid.appendChild(card);
+          });
+        }
+        window.renderHeritageRepository = renderHeritageRepository;
+
+        window.resetHeritageFilters = function() {
+          activeHeritageCat = "all";
+          activeHeritageState = "All States";
+          heritageSearchQuery = "";
+          const input = document.getElementById("heritage-main-search-input");
+          if (input) input.value = "";
+          renderHeritageRepository();
+        };
+
+        // Main Repository Search Input listener
+        const mainSearchInput = document.getElementById("heritage-main-search-input");
+        if (mainSearchInput) {
+          mainSearchInput.addEventListener("input", (e) => {
+            heritageSearchQuery = e.target.value;
+            renderHeritageRepository();
           });
         }
 
@@ -1746,8 +3455,168 @@
         updateModelBadge();
         updateStoryUI();
         renderStateCulture();
+        renderHeritageRepository();
         renderCultureGallery();
         selectFeature("3d");
+
+        // --- Live 3D Monument Gallery (Sketchfab & monument.json API) ---
+        (() => {
+          const gallery = document.querySelector("#monument-gallery");
+          const form = document.querySelector("#monument-search-form");
+          const searchInput = document.querySelector("#monument-search-term");
+          const RESULT_LIMIT = 12;
+
+          if (!gallery) return;
+
+          const LOCAL_CATALOG = [
+            { uid: "7b43e635cbfb47719d5a124302b78579", name: "Taj Mahal", city: "Agra", state: "Uttar Pradesh" },
+            { uid: "47c0ea2a759544729c137d8b86ba5b9a", name: "Hawa Mahal (Palace of Winds)", city: "Jaipur", state: "Rajasthan" },
+            { uid: "bfde286898e94fd6bd44570df4669a8c", name: "Red Fort (Lal Qila)", city: "Delhi", state: "Delhi" },
+            { uid: "e165e25ec8f1497aa83ab72419f40ddc", name: "Qutub Minar", city: "Delhi", state: "Delhi" },
+            { uid: "6cc905be2ae34e8091eb1eaa84a17738", name: "Sun Temple, Konark", city: "Konark", state: "Odisha" },
+            { uid: "3ac58986c87642c8846d28f797e59374", name: "Lahori Gate - Red Fort", city: "Delhi", state: "Delhi" },
+            { uid: "8f5d2468d33c423cbe0b63aa189ee8ce", name: "Jaipur Royal Pavilion", city: "Jaipur", state: "Rajasthan" }
+          ];
+
+          function showStatus(message) {
+            gallery.replaceChildren();
+            const status = document.createElement("p");
+            status.className = "gallery-status";
+            status.textContent = message;
+            gallery.append(status);
+          }
+
+          function getModels(payload) {
+            if (!payload) return [];
+            if (Array.isArray(payload.results?.models)) return payload.results.models;
+            if (Array.isArray(payload.results)) return payload.results;
+            if (Array.isArray(payload.models)) return payload.models;
+            if (Array.isArray(payload.data)) return payload.data;
+            if (Array.isArray(payload)) return payload;
+            return [];
+          }
+
+          function makeModelCard(model) {
+            const uid = model.uid || model.asset?.sourceModelUid;
+            if (typeof uid !== "string" || !/^[a-z0-9]+$/i.test(uid)) return null;
+
+            const card = document.createElement("article");
+            card.className = "sketchfab-card";
+
+            const frame = document.createElement("iframe");
+            frame.src = `https://sketchfab.com/models/${encodeURIComponent(uid)}/embed?autostart=0&ui_infos=0`;
+            frame.title = model.name ? `${model.name} 3D model` : "Sketchfab 3D monument model";
+            frame.loading = "lazy";
+            frame.allow = "autoplay; fullscreen; xr-spatial-tracking";
+            frame.setAttribute("allowfullscreen", "");
+
+            const info = document.createElement("div");
+            info.className = "sketchfab-card-info";
+
+            const title = document.createElement("strong");
+            title.textContent = model.name || "Untitled 3D model";
+
+            const sourceLink = document.createElement("a");
+            sourceLink.href = `https://sketchfab.com/3d-models/${encodeURIComponent(uid)}`;
+            sourceLink.target = "_blank";
+            sourceLink.rel = "noopener noreferrer";
+            sourceLink.textContent = "View source and attribution on Sketchfab";
+
+            info.append(title, sourceLink);
+            card.append(frame, info);
+            return card;
+          }
+
+          async function loadModels(searchTerm) {
+            const query = searchTerm.trim();
+            if (!query) {
+              showStatus("Enter a monument, city, or heritage site to search.");
+              return;
+            }
+
+            showStatus(`Searching models for “${query}”…`);
+            const endpoint = new URL("https://api.sketchfab.com/v3/search");
+            endpoint.searchParams.set("type", "models");
+            endpoint.searchParams.set("q", query);
+            endpoint.searchParams.set("count", String(RESULT_LIMIT));
+
+            let models = [];
+
+            // 1. Try public Sketchfab API
+            try {
+              const response = await fetch(endpoint, { headers: { Accept: "application/json" } });
+              if (response.ok) {
+                models = getModels(await response.json());
+              }
+            } catch (err) {
+              console.warn("Sketchfab direct API request bypassed, attempting local monument.json catalog:", err);
+            }
+
+            // 2. Try proxy /api/sources/sketchfab/search if running local api server
+            if (models.length === 0) {
+              try {
+                const proxyResp = await fetch(`/api/sources/sketchfab/search?q=${encodeURIComponent(query)}&limit=${RESULT_LIMIT}`);
+                if (proxyResp.ok) {
+                  const proxyJson = await proxyResp.json();
+                  models = getModels(proxyJson);
+                }
+              } catch (_) {}
+            }
+
+            // 3. Try monument.json / public/monument.json
+            if (models.length === 0) {
+              try {
+                const jsonRes = await fetch("monument.json").catch(() => fetch("/monument.json"));
+                if (jsonRes && jsonRes.ok) {
+                  const data = await jsonRes.json();
+                  const allLocal = getModels(data);
+                  const qLower = query.toLowerCase();
+                  const matched = allLocal.filter(m =>
+                    (m.name && m.name.toLowerCase().includes(qLower)) ||
+                    (m.city && m.city.toLowerCase().includes(qLower)) ||
+                    (m.state && m.state.toLowerCase().includes(qLower)) ||
+                    (m.description && m.description.toLowerCase().includes(qLower)) ||
+                    qLower.includes("monument") ||
+                    qLower.includes("india")
+                  );
+                  models = matched.length > 0 ? matched : allLocal;
+                }
+              } catch (localErr) {
+                console.warn("Failed fetching external monument.json, using built-in catalog:", localErr);
+              }
+            }
+
+            // 4. Built-in catalog fallback
+            if (models.length === 0) {
+              const qLower = query.toLowerCase();
+              const matched = LOCAL_CATALOG.filter(m =>
+                m.name.toLowerCase().includes(qLower) ||
+                m.city.toLowerCase().includes(qLower) ||
+                m.state.toLowerCase().includes(qLower) ||
+                qLower.includes("monument") ||
+                qLower.includes("india")
+              );
+              models = matched.length > 0 ? matched : LOCAL_CATALOG;
+            }
+
+            const cards = models.map(makeModelCard).filter(Boolean);
+            gallery.replaceChildren();
+
+            if (cards.length === 0) {
+              showStatus("No embeddable models were found. Try another search term.");
+              return;
+            }
+
+            gallery.append(...cards);
+          }
+
+          form?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            loadModels(searchInput?.value ?? "");
+          });
+
+          loadModels(gallery.dataset.searchTerm ?? "Indian monuments");
+        })();
 
       })();
     </script>
