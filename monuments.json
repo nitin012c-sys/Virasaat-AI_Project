@@ -1,0 +1,41 @@
+[
+  {
+    "id": "taj-mahal",
+    "name": { "en": "Taj Mahal", "hi": "ताजमहल" },
+    "location": { "city": "Agra", "state": "Uttar Pradesh", "country": "India", "coordinates": { "lat": 27.1751, "lon": 78.0421 } },
+    "period": { "en": "Mughal period; construction began in 1632 and the mausoleum was completed in 1648", "hi": "मुग़ल काल; निर्माण 1632 में शुरू हुआ और मकबरा 1648 में पूरा हुआ" },
+    "architecturalStyle": { "en": "Indo-Islamic Mughal architecture", "hi": "हिंद-इस्लामी मुग़ल वास्तुकला" },
+    "culturalSignificance": { "en": "A Mughal mausoleum commissioned by Shah Jahan in memory of Mumtaz Mahal; inscribed on the UNESCO World Heritage List in 1983.", "hi": "मुमताज़ महल की स्मृति में शाहजहाँ द्वारा बनवाया गया मुग़ल मकबरा; 1983 में यूनेस्को विश्व धरोहर सूची में शामिल हुआ।" },
+    "narration": {
+      "en": "Before you rises the Taj Mahal, a marble mausoleum on the banks of the Yamuna in Agra. Emperor Shah Jahan commissioned it in memory of Mumtaz Mahal. Its balanced plan, high central dome, four minarets, garden, and delicate stone inlay bring together the craftsmanship of artisans from across the empire. Walk around the platform and notice how light changes the marble through the day. The complex is more than a tomb: its gateway, mosque, guest house, and garden form a carefully composed whole. UNESCO recognized the site in 1983.",
+      "hi": "आपके सामने यमुना के किनारे स्थित ताजमहल है—संगमरमर का एक भव्य मकबरा। मुग़ल सम्राट शाहजहाँ ने इसे मुमताज़ महल की स्मृति में बनवाया था। संतुलित योजना, ऊँचा केंद्रीय गुंबद, चार मीनारें, बाग़ और पत्थरों की महीन जड़ाई उस समय के शिल्पकारों की कुशलता दिखाते हैं। मंच के चारों ओर चलते हुए देखें कि दिन की रोशनी में संगमरमर के रंग कैसे बदलते हैं। यह परिसर केवल मकबरा नहीं; इसका प्रवेश-द्वार, मस्जिद, मेहमानख़ाना और बाग़ मिलकर एक सुविचारित रचना बनाते हैं। यूनेस्को ने इसे 1983 में विश्व धरोहर के रूप में मान्यता दी।"
+    },
+    "sources": [{ "title": "Taj Mahal — UNESCO World Heritage Centre", "url": "https://whc.unesco.org/en/list/252/", "license": "UNESCO page description: CC-BY-SA IGO 3.0; metadata and original narration in this API are independently written." }]
+  },
+  {
+    "id": "konark-sun-temple",
+    "name": { "en": "Sun Temple, Konark", "hi": "कोणार्क सूर्य मंदिर" },
+    "location": { "city": "Konark", "state": "Odisha", "country": "India", "coordinates": { "lat": 19.8876, "lon": 86.0945 } },
+    "period": { "en": "13th century; associated with the kingdom of Odisha (historically Orissa)", "hi": "13वीं शताब्दी; ओडिशा (ऐतिहासिक नाम उड़ीसा) के राज्य से संबद्ध" },
+    "architecturalStyle": { "en": "Kalinga temple architecture", "hi": "कलिंग मंदिर वास्तुकला" },
+    "culturalSignificance": { "en": "A monumental temple dedicated to Surya, conceived as a stone chariot; UNESCO World Heritage site since 1984.", "hi": "सूर्य देव को समर्पित विशाल मंदिर, जिसकी कल्पना पत्थर के रथ के रूप में की गई; 1984 से यूनेस्को विश्व धरोहर स्थल।" },
+    "narration": {
+      "en": "At Konark, the temple takes the form of Surya’s great stone chariot. Its sculpted wheels and horses turn architecture into a story of movement across the sky. Built in the thirteenth century, the surviving complex reflects the ambition and skill of Kalinga builders. Look closely at the carved surfaces: they preserve details of artistic practice and life in their time. The main tower no longer stands, yet the remaining structures still convey the scale of the original design. UNESCO inscribed the Sun Temple in 1984.",
+      "hi": "कोणार्क में मंदिर को सूर्य देव के विशाल पत्थर के रथ के रूप में रचा गया है। इसके तराशे हुए पहिए और घोड़े आकाश में सूर्य की यात्रा का दृश्य बनाते हैं। 13वीं शताब्दी में निर्मित यह परिसर कलिंग के स्थापत्यकारों की कल्पना और कौशल दर्शाता है। इसकी मूर्तियों और अलंकरणों को ध्यान से देखें—वे उस समय की कला और जीवन के संकेत सँजोए हुए हैं। मुख्य शिखर आज मौजूद नहीं है, फिर भी बची हुई संरचनाएँ मूल योजना के विस्तार का एहसास कराती हैं। यूनेस्को ने सूर्य मंदिर को 1984 में विश्व धरोहर सूची में शामिल किया।"
+    },
+    "sources": [{ "title": "Sun Temple, Konârak — UNESCO World Heritage Centre", "url": "https://whc.unesco.org/en/list/246/", "license": "UNESCO page description: CC-BY-SA IGO 3.0; metadata and original narration in this API are independently written." }]
+  },
+  {
+    "id": "ajanta-caves",
+    "name": { "en": "Ajanta Caves", "hi": "अजंता की गुफाएँ" },
+    "location": { "city": "Ajanta", "state": "Maharashtra", "country": "India", "coordinates": { "lat": 20.5519, "lon": 75.7033 } },
+    "period": { "en": "Two major phases: 2nd–1st centuries BCE and 5th–6th centuries CE", "hi": "दो प्रमुख चरण: ईसा पूर्व दूसरी–पहली शताब्दी और ईस्वी पाँचवीं–छठी शताब्दी" },
+    "architecturalStyle": { "en": "Buddhist rock-cut architecture with chaityagrihas and viharas", "hi": "चैत्यगृहों और विहारों वाली बौद्ध शैल-कट वास्तुकला" },
+    "culturalSignificance": { "en": "A major Buddhist artistic and monastic complex, known for its paintings and sculpture; UNESCO World Heritage site since 1983.", "hi": "चित्रों और मूर्तियों के लिए प्रसिद्ध प्रमुख बौद्ध कला एवं मठ परिसर; 1983 से यूनेस्को विश्व धरोहर स्थल।" },
+    "narration": {
+      "en": "The Ajanta Caves are cut into a curved cliff above the Waghora River. Monks and artisans shaped these spaces in two broad phases, centuries apart. Some caves served as prayer halls, while others offered monastic living spaces. Inside, paintings and sculptures tell stories of Buddhist belief and reveal the artistic world of their makers. Pause to notice how the rock itself becomes architecture: pillars, halls, shrines, and quiet rooms emerge from the hillside. Ajanta was inscribed on the UNESCO World Heritage List in 1983.",
+      "hi": "अजंता की गुफाएँ वाघोरा नदी के ऊपर मुड़ी हुई चट्टान में बनाई गई हैं। भिक्षुओं और शिल्पकारों ने कई सदियों के अंतराल पर दो बड़े चरणों में इन स्थानों को तराशा। कुछ गुफाएँ प्रार्थना-सभागृह थीं, जबकि अन्य मठों के रहने के स्थान। भीतर के चित्र और मूर्तियाँ बौद्ध कथाओं के साथ अपने रचनाकारों की कलात्मक दुनिया भी दिखाते हैं। ध्यान दें कि चट्टान ही कैसे वास्तुकला बन जाती है—स्तंभ, सभागृह, मंदिर-कक्ष और शांत कक्ष पहाड़ी से उभरते हैं। अजंता को 1983 में यूनेस्को विश्व धरोहर सूची में शामिल किया गया।"
+    },
+    "sources": [{ "title": "Ajanta Caves — UNESCO World Heritage Centre", "url": "https://whc.unesco.org/en/list/242/", "license": "UNESCO page description: CC-BY-SA IGO 3.0; metadata and original narration in this API are independently written." }]
+  }
+]
