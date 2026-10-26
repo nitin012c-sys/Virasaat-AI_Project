@@ -922,6 +922,78 @@
       .modal-footer-bar strong {
         color: #f0e8db;
       }
+      .monument-insights {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 14px 24px;
+        background: rgba(26, 20, 15, 0.98);
+        border-top: 1px solid rgba(240,232,219,0.12);
+      }
+      .monument-insights-kicker {
+        margin: 0 0 4px;
+        color: #d7b36c;
+        font-size: 9px;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+      .monument-insights h4 {
+        margin: 0 0 8px;
+        color: #f0e8db;
+        font-family: "Playfair Display", serif;
+        font-size: 17px;
+      }
+      .monument-insights ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px 18px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .monument-insights li {
+        color: #c9bdad;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+      .monument-insights li::before { content: "✦"; color: #d7b36c; margin-right: 7px; }
+      .monument-insights-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+      .monument-insights-actions button {
+        border: 1px solid #d7b36c;
+        padding: 9px 12px;
+        background: #d7b36c;
+        color: #201a15;
+        cursor: pointer;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+      .monument-insights-actions a, .story-source-link {
+        color: #d7b36c;
+        font-size: 10px;
+        letter-spacing: .06em;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .story-guide { margin: 0 0 12px; color: #c9bdad; font-size: 12px; line-height: 1.55; }
+      .story-language-switch { display: flex; gap: 7px; margin: 0 0 14px; }
+      .story-language-switch button {
+        border: 1px solid rgba(215,179,108,.42);
+        padding: 6px 10px;
+        background: transparent;
+        color: #baa98f;
+        cursor: pointer;
+        font-size: 10px;
+        letter-spacing: .08em;
+      }
+      .story-language-switch button.is-active { background: #d7b36c; color: #201a15; border-color: #d7b36c; font-weight: 700; }
+      .story-source-link { display: inline-block; margin-top: 2px; }
+      @media (max-width: 760px) {
+        .monument-insights { align-items: flex-start; flex-direction: column; gap: 12px; padding: 14px 18px; }
+        .monument-insights-actions { flex-wrap: wrap; }
+      }
 
       /* Heritage Repository Section & State Culture Explorer */
       .heritage-repository-section {
@@ -1337,6 +1409,7 @@
       .sketchfab-card-info { padding: 14px 16px 18px; }
       .sketchfab-card-info strong { display: block; font-family: "Playfair Display", serif; font-size: 18px; }
       .sketchfab-card-info a { display: inline-block; margin-top: 8px; color: var(--brick); font-size: 12px; text-decoration: underline; }
+      .sketchfab-card-info button { display: block; width: 100%; margin-top: 12px; border: 1px solid var(--ink); padding: 9px 10px; background: var(--ink); color: var(--paper); cursor: pointer; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
       .gallery-status { grid-column: 1 / -1; color: #776b5f; }
       @media (max-width: 900px) { .monument-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
       @media (max-width: 560px) { .sketchfab-section { padding: 72px 24px; } .sketchfab-search { flex-direction: column; } .sketchfab-search button { min-height: 46px; } .monument-gallery { grid-template-columns: 1fr; } }
@@ -1482,12 +1555,17 @@
 
           <!-- Module Panel: AI Storyteller -->
           <div class="browse-panel experience-panel" id="panel-story" style="display: none;">
+            <p class="story-guide" id="story-guide">Choose a 3D monument and listen to its story in English or Hindi.</p>
+            <div class="story-language-switch" role="group" aria-label="Story language">
+              <button class="is-active" id="story-language-en" type="button">English</button>
+              <button id="story-language-hi" type="button">हिंदी</button>
+            </div>
             <div class="search-row">
               <label class="search-field">
                 <span id="search-icon-story"></span>
                 <input
                   id="story-search-input"
-                  placeholder="Search a dynasty or empire…"
+                  placeholder="Search a 3D monument or dynasty…"
                   autocomplete="off"
                 />
               </label>
@@ -1510,6 +1588,7 @@
             <p class="story-summary" id="story-summary-text">
               Masters of bronze, oceans and monumental temples · 848–1279 CE
             </p>
+            <a class="story-source-link" id="story-source-link" href="https://indialegacy.in/monuments/" target="_blank" rel="noopener noreferrer">Research source: IndiaLegacy Monuments ↗</a>
           </div>
 
           <!-- Module Panel: State Culture -->
@@ -1609,10 +1688,10 @@
       <!-- Living Heritage Repository: Festivals, Food & Musical Instruments of India -->
       <section class="heritage-repository-section" id="heritage-repository" aria-labelledby="heritage-repository-title">
         <div class="heritage-header">
-          <p class="eyebrow"><span></span> National Cultural Archives · Ministry of Culture Portal</p>
+          <p class="eyebrow"><span></span> Living heritage repository · Sources linked per record</p>
           <h2 id="heritage-repository-title">FESTIVALS, FOOD &amp; SOUNDS<br /><em>OF INDIA.</em></h2>
           <p>
-            Explore living traditions documented across the States of India—from sacred harvest festivals and centuries-old culinary heritage to indigenous musical instruments codified in the ancient <em>Natya Shastra</em>.
+            Explore living traditions across India—from sacred harvest festivals and regional foodways to indigenous instruments. Each card keeps a direct link to its research source, including IndiaLegacy festival guides.
           </p>
         </div>
 
@@ -1698,12 +1777,24 @@
                 <a href="#" target="_blank" rel="noopener noreferrer" id="modal-streetview-btn">Launch Official 360° Street View ↗</a>
               </div>
             </div>
+            <aside class="monument-insights" aria-label="Monument key points">
+              <div>
+                <p class="monument-insights-kicker">Explore while you look</p>
+                <h4>Key points</h4>
+                <ul id="modal-key-points"></ul>
+              </div>
+              <div class="monument-insights-actions">
+                <button type="button" id="modal-tell-story-btn">Listen in English</button>
+                <a href="https://indialegacy.in/monuments/" id="modal-research-link" target="_blank" rel="noopener noreferrer">Read source notes ↗</a>
+              </div>
+            </aside>
             <div class="modal-footer-bar">
               <div>
                 <span id="modal-footer-hotspots">✦ 24 Verified Hotspots Active</span>
                 <span style="margin: 0 8px; opacity: 0.4;">|</span>
                 <span id="modal-footer-dynasty">Dynasty: Mughal Empire</span>
               </div>
+              <span id="modal-footer-notes">Interactive heritage model</span>
             </div>
           </div>
         </div>
@@ -1736,7 +1827,7 @@
               <p style="color: #c9bdad; font-size: 13px; line-height: 1.6; margin: 0;" id="cultural-modal-history"></p>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(240,232,219,0.12); padding-top: 16px; flex-wrap: wrap; gap: 12px;">
-              <span style="font-size: 11px; color: #8e8272;">Source: Ministry of Culture, Govt. of India (Indian Culture Portal)</span>
+              <span id="cultural-modal-source-label" style="font-size: 11px; color: #8e8272;">Source: Ministry of Culture, Govt. of India (Indian Culture Portal)</span>
               <a href="#" target="_blank" rel="noopener noreferrer" id="cultural-modal-source-btn" class="modal-ext-link">Visit Official Portal Record ↗</a>
             </div>
           </div>
@@ -1745,9 +1836,6 @@
 
     </main>
     <!-- figma:body-end -->
-
-    <!-- Sketchfab public search needs no credential. -->
-    <script src="/monument-gallery.js" defer></script>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
@@ -1924,6 +2012,75 @@
           { name: "The Vijayanagara Empire", era: "1336–1646 CE", story: "Golden era of stone carving, markets and Hampi" },
           { name: "The Maratha Empire", era: "1674–1818 CE", story: "Rugged hill forts and naval prowess of Chhatrapati Shivaji" }
         ];
+
+        const MONUMENT_STORIES = {
+          "Taj Mahal": {
+            english: "The Taj Mahal was commissioned by Emperor Shah Jahan as a mausoleum for Mumtaz Mahal. Its white marble, formal garden and riverside setting turn memory into architecture. Look closely at the symmetry: every path, pool and arch guides the eye toward the tomb at the centre.",
+            hindi: "ताजमहल को सम्राट शाहजहाँ ने मुमताज़ महल की स्मृति में बनवाया था। सफेद संगमरमर, चारबाग और यमुना के किनारे का दृश्य इसे स्मृति और स्थापत्य का अनोखा संगम बनाते हैं। इसकी सममिति पर ध्यान दें—हर रास्ता, जलधारा और मेहराब आपकी नज़र को मकबरे के केंद्र तक ले जाता है।",
+            points: [
+              { en: "White marble mausoleum on the Yamuna", hi: "यमुना किनारे सफेद संगमरमर का मकबरा" },
+              { en: "Mughal charbagh garden plan", hi: "मुगल चारबाग उद्यान योजना" },
+              { en: "Symmetry frames the central tomb", hi: "सममिति केंद्रीय मकबरे को उभारती है" }
+            ],
+            sourceLabel: "IndiaLegacy monuments collection",
+            sourceUrl: "https://indialegacy.in/monuments/"
+          },
+          "Sun Temple, Konark": {
+            english: "Konark's Sun Temple was imagined as Surya's monumental stone chariot. Its carved wheels, horses and celestial imagery make the building itself feel like it is travelling across the sky. The surviving structure shows the extraordinary ambition of thirteenth-century Odisha.",
+            hindi: "कोणार्क का सूर्य मंदिर सूर्य देव के विशाल पत्थर के रथ के रूप में रचा गया था। इसके तराशे हुए पहिए, घोड़े और आकाशीय आकृतियाँ इमारत को मानो आकाश में गतिमान दिखाती हैं। बचा हुआ परिसर तेरहवीं सदी के ओडिशा की असाधारण कलात्मक महत्वाकांक्षा को दर्शाता है।",
+            points: [
+              { en: "A stone chariot dedicated to Surya", hi: "सूर्य देव को समर्पित पत्थर का रथ" },
+              { en: "Carved wheels act as visual timekeepers", hi: "नक्काशीदार पहिए समय के प्रतीक हैं" },
+              { en: "Kalinga craftsmanship in Odisha", hi: "ओडिशा की कलिंग शिल्प परंपरा" }
+            ],
+            sourceLabel: "IndiaLegacy: Konark Sun Temple guide",
+            sourceUrl: "https://indialegacy.in/monuments/sun-temple-konark-history-the-stone-chariot-of-the-sun-god/"
+          },
+          "Qutub Minar": {
+            english: "Qutub Minar rises above a layered complex of mosques, gateways and reused stonework in Mehrauli. Its fluted shaft is built in distinct stages, carrying inscriptions and decorative bands that record the visual language of the early Delhi Sultanate.",
+            hindi: "कुतुब मीनार महरौली के मस्जिदों, द्वारों और पुनः उपयोग किए गए पत्थरों वाले बहुस्तरीय परिसर के ऊपर उठती है। इसका खांचेदार स्तंभ अलग-अलग चरणों में बना है और उस पर अंकित लेख तथा सजावटी पट्टियाँ प्रारंभिक दिल्ली सल्तनत की दृश्य भाषा को दिखाती हैं।",
+            points: [
+              { en: "Fluted brick-and-stone minaret", hi: "खांचेदार ईंट और पत्थर की मीनार" },
+              { en: "Part of the wider Qutub complex", hi: "विशाल कुतुब परिसर का हिस्सा" },
+              { en: "Inscriptions and bands mark each stage", hi: "अभिलेख और पट्टियाँ हर चरण को चिह्नित करती हैं" }
+            ],
+            sourceLabel: "IndiaLegacy monuments collection",
+            sourceUrl: "https://indialegacy.in/monuments/"
+          },
+          "Brihadeeswarar Temple": {
+            english: "Brihadeeswarar Temple at Thanjavur is a great Chola temple dedicated to Shiva. Its towering vimana and extensive inscriptions reveal both monumental engineering and the everyday organisation of a living religious institution.",
+            hindi: "तंजावुर का बृहदीश्वर मंदिर शिव को समर्पित एक महान चोल मंदिर है। इसका ऊँचा विमान और विस्तृत अभिलेख केवल विशाल इंजीनियरिंग नहीं, बल्कि एक जीवंत धार्मिक संस्था के दैनिक संगठन की कहानी भी बताते हैं।",
+            points: [
+              { en: "Great Chola temple dedicated to Shiva", hi: "शिव को समर्पित महान चोल मंदिर" },
+              { en: "Monumental granite vimana", hi: "विशाल ग्रेनाइट विमान" },
+              { en: "Inscriptions record temple life", hi: "अभिलेख मंदिर जीवन का रिकॉर्ड रखते हैं" }
+            ],
+            sourceLabel: "IndiaLegacy: Brihadeeswarar Temple guide",
+            sourceUrl: "https://indialegacy.in/monuments/brihadeeswarar-temple-history-a-masterpiece-of-chola-architecture/"
+          },
+          "Hawa Mahal": {
+            english: "Hawa Mahal, the Palace of Winds, is Jaipur's distinctive five-storey façade. Its many small jharokhas allowed royal women to observe processions while air moved through the latticework, giving the building its celebrated name.",
+            hindi: "हवा महल, यानी हवाओं का महल, जयपुर की विशिष्ट पाँच मंज़िला अग्र-दीवार है। इसके अनेक छोटे झरोखों से शाही महिलाएँ जुलूस देख सकती थीं और जालीदार रचना से हवा भीतर बहती थी—इसी से इसे यह प्रसिद्ध नाम मिला।",
+            points: [
+              { en: "Five-storey Jaipur landmark", hi: "जयपुर का पाँच मंज़िला प्रतीक" },
+              { en: "Hundreds of jharokha windows", hi: "सैकड़ों झरोखा खिड़कियाँ" },
+              { en: "Ventilation and discreet viewing", hi: "हवादार रचना और परदे में दृश्यावलोकन" }
+            ],
+            sourceLabel: "IndiaLegacy: Hawa Mahal guide",
+            sourceUrl: "https://indialegacy.in/monuments/hawa-mahal-jaipur-history-and-heritage-of-india/"
+          },
+          "Red Fort": {
+            english: "The Red Fort was the imperial palace-fort of Shahjahanabad. Its red sandstone walls protected courtly spaces, gardens and ceremonial routes. The complex tells a story of Mughal political power as well as the artistry of its pavilions and water channels.",
+            hindi: "लाल किला शाहजहानाबाद का शाही महल-किला था। इसकी लाल बलुआ-पत्थर की दीवारों के भीतर दरबारी कक्ष, बाग और औपचारिक मार्ग थे। यह परिसर मुगल राजनीतिक शक्ति के साथ-साथ मंडपों और जलधाराओं की कलात्मकता की कहानी भी कहता है।",
+            points: [
+              { en: "Imperial palace-fort of Shahjahanabad", hi: "शाहजहानाबाद का शाही महल-किला" },
+              { en: "Red sandstone defensive walls", hi: "लाल बलुआ-पत्थर की रक्षात्मक दीवारें" },
+              { en: "Pavilions, gardens and water channels", hi: "मंडप, बाग और जलधाराएँ" }
+            ],
+            sourceLabel: "IndiaLegacy monuments collection",
+            sourceUrl: "https://indialegacy.in/monuments/"
+          }
+        };
 
         const stateCultures = {
           "Rajasthan": {
@@ -2193,7 +2350,9 @@
             purpose: "Four-day rigorous ascetic vow dedicated to Surya and Usha; devotees stand in flowing river waters offering arghya in woven bamboo baskets (soop) with zero caste or priestly mediation.",
             history: "Direct continuation of Rigvedic solar adoration; mentioned in the Mahabharata as practiced by Karna (ruler of Anga) and Draupadi. Noted for strict ecological purity.",
             image: "https://images.unsplash.com/photo-1544717305-2782549b5136?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
-            sourceUrl: "https://www.indianculture.gov.in/festivals-of-india"
+            sourceUrl: "https://indialegacy.in/culture/chhath-puja-sun-worship-complete-guide/",
+            sourceName: "IndiaLegacy",
+            sourceCta: "Read IndiaLegacy guide ↗"
           },
           {
             id: "fest-hemis",
@@ -2709,6 +2868,102 @@
           }
         ];
 
+        // Short original summaries linked to the relevant IndiaLegacy festival guides.
+        // The source articles remain the place to read their full text and photography.
+        const INDIA_LEGACY_FESTIVAL_DATA = [
+          {
+            id: "fest-legacy-diwali",
+            title: "Diwali / Deepavali",
+            sub: "Five-day festival of lights",
+            state: "Pan-India",
+            region: "Across India",
+            category: "festivals",
+            categoryLabel: "IndiaLegacy Festival Guide",
+            purpose: "Homes are lit with diyas, families gather for Lakshmi Puja, and sweets are shared as a sign of welcome, renewal and hope.",
+            history: "Regional traditions connect the festival to several stories, including Rama's return to Ayodhya, Krishna's victory over Narakasura, Mahavira's nirvana, and Bandi Chhor Divas in Sikh tradition.",
+            image: "https://images.unsplash.com/photo-1605640840605-14ac1855827b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://indialegacy.in/culture/diwali-festival-of-india/",
+            sourceName: "IndiaLegacy",
+            sourceCta: "Read IndiaLegacy guide ↗"
+          },
+          {
+            id: "fest-legacy-christmas",
+            title: "Christmas in India",
+            sub: "Bada Din, carols and regional tables",
+            state: "Kerala, Goa & Northeast",
+            region: "Across India",
+            category: "festivals",
+            categoryLabel: "IndiaLegacy Festival Guide",
+            purpose: "Church services, carols, star lanterns and shared seasonal food bring together distinct Christian communities and their neighbours across India.",
+            history: "The guide traces the festival through Kerala's long Christian history, Goa's Catholic food traditions, and the central place of Christmas in several northeastern states.",
+            image: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://indialegacy.in/culture/christmas-festival-in-india/",
+            sourceName: "IndiaLegacy",
+            sourceCta: "Read IndiaLegacy guide ↗"
+          },
+          {
+            id: "fest-legacy-karva-chauth",
+            title: "Karva Chauth",
+            sub: "Moonrise fast and family ritual",
+            state: "Punjab, Haryana, Delhi & Rajasthan",
+            region: "North",
+            category: "festivals",
+            categoryLabel: "IndiaLegacy Festival Guide",
+            purpose: "Many married Hindu women observe a dawn-to-moonrise fast, then gather with family for the ritual of viewing the moon through a sieve.",
+            history: "The contemporary observance has regional roots in North India and continues to change as families reinterpret the ritual together.",
+            image: "https://images.unsplash.com/photo-1610024062303-bf1f7c0c8e4d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://indialegacy.in/culture/karva-chauth-fast-story-and-traditions/",
+            sourceName: "IndiaLegacy",
+            sourceCta: "Read IndiaLegacy guide ↗"
+          },
+          {
+            id: "fest-legacy-dussehra",
+            title: "Dussehra / Vijayadashami",
+            sub: "Victory, performance and local traditions",
+            state: "Pan-India",
+            region: "Across India",
+            category: "festivals",
+            categoryLabel: "IndiaLegacy Festival Guide",
+            purpose: "The tenth day of the autumn festival season is marked by public performance, processions and regional observances of ethical victory and renewal.",
+            history: "Its many local forms draw on Ramayana traditions and Durga's victory over Mahishasura, while communities adapt the day through their own theatre, worship and craft.",
+            image: "https://images.unsplash.com/photo-1598452963314-9c23e1a6d4fe?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://indialegacy.in/culture/dussehra-vijayadashami-rama-ravana-story/",
+            sourceName: "IndiaLegacy",
+            sourceCta: "Read IndiaLegacy guide ↗"
+          },
+          {
+            id: "fest-legacy-lohri-makar",
+            title: "Lohri & Makar Sankranti",
+            sub: "Winter harvest celebrations",
+            state: "Punjab and Pan-India",
+            region: "North",
+            category: "festivals",
+            categoryLabel: "IndiaLegacy Festival Guide",
+            purpose: "Bonfires, seasonal food and gatherings mark the harvest season, while related observances take many names and forms across the country.",
+            history: "The guide connects Lohri and Makar Sankranti through a shared agricultural calendar while keeping their regional customs distinct.",
+            image: "https://images.unsplash.com/photo-1603912699214-92627f304eb6?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://indialegacy.in/culture/lohri-aur-makar-sankranti-bharatiya-fasal-tyohar/",
+            sourceName: "IndiaLegacy",
+            sourceCta: "Read IndiaLegacy guide ↗"
+          },
+          {
+            id: "fest-legacy-basant-panchami",
+            title: "Basant Panchami",
+            sub: "Spring, learning and the colour yellow",
+            state: "Pan-India",
+            region: "Across India",
+            category: "festivals",
+            categoryLabel: "IndiaLegacy Festival Guide",
+            purpose: "The arrival of spring is marked with yellow clothing, seasonal food, music and prayers connected with learning and creativity.",
+            history: "The guide presents the celebration as a seasonal festival with varied regional practices, from school rituals to community gatherings.",
+            image: "https://images.unsplash.com/photo-1619025873875-6d0eb0ec1c50?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1000",
+            sourceUrl: "https://indialegacy.in/culture/basant-panchami/",
+            sourceName: "IndiaLegacy",
+            sourceCta: "Read IndiaLegacy guide ↗"
+          }
+        ];
+        CULTURAL_HERITAGE_DATA.push(...INDIA_LEGACY_FESTIVAL_DATA);
+
         const cultureChanges = [
           { id: "currency", title: "Currency", then: "Silver rupee", now: "Digital rupee", note: "From hand-struck imperial coins to instant digital exchange." },
           { id: "message", title: "Messages", then: "Palm-leaf letter", now: "Instant message", note: "The medium changed; our need to stay connected did not." },
@@ -2737,6 +2992,8 @@
         let selectedMonument = monuments[0];
         let visitMode = "model";
         let selectedDynasty = dynasties[0];
+        let selectedNarrative = { type: "monument", item: monuments[0] };
+        let storyLanguage = "en";
         let isPlaying = false;
         let selectedState = "Rajasthan";
         let selectedCultureCategory = stateCultures["Rajasthan"] ? stateCultures["Rajasthan"].categories[0] : null;
@@ -2838,6 +3095,7 @@
             btn.innerHTML = `<strong>${m.name}</strong><span>${m.place}</span>`;
             btn.addEventListener("click", () => {
               selectedMonument = m;
+              selectMonumentStory(m);
               renderRecentMonuments();
               update3DLabels();
               changeBackdrop();
@@ -2904,6 +3162,7 @@
               `;
               item.addEventListener("click", () => {
                 selectedMonument = m;
+                selectMonumentStory(m);
                 monumentSearchInput.value = "";
                 monumentSearchResults.style.display = "none";
                 recentsWrap.style.display = "block";
@@ -2925,12 +3184,37 @@
         const modalStreetviewBanner = document.getElementById("modal-streetview-banner");
         const modalStreetviewBtn = document.getElementById("modal-streetview-btn");
         const modalSourceLink = document.getElementById("modal-source-link");
+        const modalKeyPoints = document.getElementById("modal-key-points");
+        const modalTellStoryBtn = document.getElementById("modal-tell-story-btn");
+        const modalResearchLink = document.getElementById("modal-research-link");
+
+        function updateMonumentInsights(monument) {
+          const narrative = MONUMENT_STORIES[monument.name];
+          if (!narrative) return;
+
+          if (modalKeyPoints) {
+            modalKeyPoints.replaceChildren();
+            narrative.points.forEach((point) => {
+              const item = document.createElement("li");
+              item.textContent = storyLanguage === "hi" ? point.hi : point.en;
+              modalKeyPoints.appendChild(item);
+            });
+          }
+          if (modalTellStoryBtn) {
+            modalTellStoryBtn.textContent = storyLanguage === "hi" ? "हिंदी में सुनें" : "Listen in English";
+          }
+          if (modalResearchLink) {
+            modalResearchLink.href = narrative.sourceUrl;
+            modalResearchLink.textContent = `Research: ${narrative.sourceLabel} ↗`;
+          }
+        }
 
         function openFullscreenViewer(monument, mode) {
           if (!monument) monument = selectedMonument;
           if (!mode) mode = visitMode;
           visitMode = mode;
           selectedMonument = monument;
+          selectMonumentStory(monument);
 
           renderVisitModes();
           updateModelBadge();
@@ -2950,6 +3234,7 @@
           eraBadge.textContent = `${monument.place} · ${monument.dynasty} (${monument.year})`;
           footerHotspots.textContent = `✦ ${monument.hotspots} Verified Archival Hotspots`;
           footerDynasty.textContent = `Dynasty: ${monument.dynasty}`;
+          updateMonumentInsights(monument);
 
           // Highlight active mode tab in modal
           document.querySelectorAll(".modal-mode-tab").forEach(tab => {
@@ -3021,20 +3306,70 @@
 
         window.openFullscreenViewer = openFullscreenViewer;
 
+        modalTellStoryBtn?.addEventListener("click", () => {
+          selectMonumentStory(selectedMonument, true);
+        });
+
         // --- AI Storyteller Logic ---
         const storySearchInput = document.getElementById("story-search-input");
         const storySearchResults = document.getElementById("story-search-results");
         const surpriseStoryBtn = document.getElementById("surprise-story-btn");
         const storyToggleBtn = document.getElementById("story-toggle-btn");
         const soundwaveBars = document.getElementById("soundwave-bars");
+        const storySourceLink = document.getElementById("story-source-link");
+        const storyGuide = document.getElementById("story-guide");
+        const languageEnglishBtn = document.getElementById("story-language-en");
+        const languageHindiBtn = document.getElementById("story-language-hi");
+
+        function currentMonumentNarrative() {
+          return MONUMENT_STORIES[selectedNarrative.item.name] || MONUMENT_STORIES[monuments[0].name];
+        }
 
         function updateStoryUI() {
-          document.getElementById("story-player-status").textContent = isPlaying ? "Now telling" : "Ready to tell";
-          document.getElementById("story-player-title").textContent = selectedDynasty.name;
-          document.getElementById("story-summary-text").textContent = `${selectedDynasty.story} · ${selectedDynasty.era}`;
+          const narrative = currentMonumentNarrative();
+          const isHindi = storyLanguage === "hi";
+          const text = isHindi ? narrative.hindi : narrative.english;
+          document.getElementById("story-player-status").textContent = isPlaying
+            ? (isHindi ? "कहानी सुनाई जा रही है" : "Now telling")
+            : (isHindi ? "सुनने के लिए तैयार" : "Ready to tell");
+          document.getElementById("story-player-title").textContent = selectedNarrative.item.name;
+          document.getElementById("story-summary-text").textContent = text;
           document.getElementById("story-play-icon").innerHTML = isPlaying ? ICONS.pause(20) : ICONS.play(20);
           soundwaveBars.classList.toggle("moving", isPlaying);
+          languageEnglishBtn?.classList.toggle("is-active", !isHindi);
+          languageHindiBtn?.classList.toggle("is-active", isHindi);
+          if (storyGuide) {
+            storyGuide.textContent = isHindi
+              ? "चुने हुए 3D स्मारक की कहानी सुनें, फिर मॉडल में दिए गए मुख्य बिंदुओं को देखें।"
+              : "Listen to the selected 3D monument's story, then explore its key points in the model.";
+          }
+          if (storySourceLink) {
+            storySourceLink.href = narrative.sourceUrl;
+            storySourceLink.textContent = `Research source: ${narrative.sourceLabel} ↗`;
+          }
         }
+
+        function selectMonumentStory(monument, shouldPlay = false) {
+          selectedMonument = monument;
+          selectedNarrative = { type: "monument", item: monument };
+          if (shouldPlay) {
+            speakCurrentStory();
+          } else {
+            updateStoryUI();
+            updateMonumentInsights(monument);
+          }
+        }
+
+        function setStoryLanguage(language) {
+          storyLanguage = language;
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+          isPlaying = false;
+          updateStoryUI();
+          updateMonumentInsights(selectedMonument);
+        }
+
+        languageEnglishBtn?.addEventListener("click", () => setStoryLanguage("en"));
+        languageHindiBtn?.addEventListener("click", () => setStoryLanguage("hi"));
 
         storySearchInput.addEventListener("input", (e) => {
           const q = e.target.value.trim().toLowerCase();
@@ -3044,22 +3379,23 @@
           }
           storySearchResults.style.display = "block";
           storySearchResults.innerHTML = "";
-          const matched = dynasties.filter(d => d.name.toLowerCase().includes(q));
+          const matched = monuments.filter((monument) =>
+            `${monument.name} ${monument.place} ${monument.dynasty}`.toLowerCase().includes(q),
+          );
           if (matched.length === 0) {
-            storySearchResults.innerHTML = `<p class="empty-state">No matching dynasty found.</p>`;
+            storySearchResults.innerHTML = `<p class="empty-state">No 3D monument matches that search.</p>`;
           } else {
-            matched.forEach(d => {
+            matched.forEach((monument) => {
               const item = document.createElement("button");
               item.type = "button";
               item.innerHTML = `
-                <span><strong>${d.name}</strong><small>${d.era}</small></span>
+                <span><strong>${monument.name}</strong><small>${monument.place} · ${monument.year}</small></span>
                 ${ICONS.arrow(15)}
               `;
               item.addEventListener("click", () => {
-                selectedDynasty = d;
+                selectMonumentStory(monument);
                 storySearchInput.value = "";
                 storySearchResults.style.display = "none";
-                updateStoryUI();
                 changeBackdrop();
               });
               storySearchResults.appendChild(item);
@@ -3068,31 +3404,39 @@
         });
 
         surpriseStoryBtn.addEventListener("click", () => {
-          const idx = dynasties.findIndex(d => d.name === selectedDynasty.name);
-          selectedDynasty = dynasties[(idx + 1) % dynasties.length];
+          const idx = monuments.findIndex((monument) => monument.name === selectedNarrative.item.name);
+          const nextMonument = monuments[(idx + 1) % monuments.length];
           storySearchInput.value = "";
           storySearchResults.style.display = "none";
-          isPlaying = true;
-          updateStoryUI();
+          selectMonumentStory(nextMonument, true);
           changeBackdrop();
-          speakStory(selectedDynasty);
         });
 
         storyToggleBtn.addEventListener("click", () => {
-          isPlaying = !isPlaying;
-          updateStoryUI();
           if (isPlaying) {
-            speakStory(selectedDynasty);
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isPlaying = false;
+            updateStoryUI();
           } else if (window.speechSynthesis) {
-            window.speechSynthesis.cancel();
+            speakCurrentStory();
           }
         });
 
-        function speakStory(d) {
+        function speakCurrentStory() {
           if (!('speechSynthesis' in window)) return;
+          const narrative = currentMonumentNarrative();
+          const text = storyLanguage === "hi" ? narrative.hindi : narrative.english;
+          const targetLanguage = storyLanguage === "hi" ? "hi-IN" : "en-IN";
           window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(`${d.name}. ${d.story}, during ${d.era}.`);
+          const utterance = new SpeechSynthesisUtterance(`${selectedNarrative.item.name}. ${text}`);
+          const matchingVoice = window.speechSynthesis.getVoices().find((voice) =>
+            voice.lang.toLowerCase().startsWith(storyLanguage === "hi" ? "hi" : "en"),
+          );
+          if (matchingVoice) utterance.voice = matchingVoice;
+          utterance.lang = targetLanguage;
           utterance.rate = 0.95;
+          isPlaying = true;
+          updateStoryUI();
           utterance.onend = () => {
             isPlaying = false;
             updateStoryUI();
@@ -3118,11 +3462,14 @@
           document.getElementById("cultural-modal-sub").textContent = `${item.sub} · Region: ${item.region} India`;
           document.getElementById("cultural-modal-purpose").textContent = item.purpose;
           document.getElementById("cultural-modal-history").textContent = item.history;
+          const sourceName = item.sourceName || "Ministry of Culture, Govt. of India (Indian Culture Portal)";
+          const sourceLabel = document.getElementById("cultural-modal-source-label");
+          if (sourceLabel) sourceLabel.textContent = `Source: ${sourceName}`;
 
           const sourceBtn = document.getElementById("cultural-modal-source-btn");
           if (sourceBtn) {
             sourceBtn.href = item.sourceUrl;
-            sourceBtn.textContent = `Open Official Record on ${item.categoryLabel} Portal ↗`;
+            sourceBtn.textContent = item.sourceCta || `Open ${item.categoryLabel} record ↗`;
           }
 
           modal.classList.add("is-open");
@@ -3326,6 +3673,7 @@
           filtered.forEach(item => {
             const card = document.createElement("article");
             card.className = "heritage-card";
+            const sourceName = item.sourceName || "Indian Culture Portal";
             card.innerHTML = `
               <div class="heritage-card-media" style="cursor: pointer;" title="Click to inspect archival record">
                 <img src="${item.image}" alt="${item.title}" loading="lazy" />
@@ -3349,8 +3697,8 @@
                   <button type="button" class="heritage-explore-btn">
                     View Archival Record ↗
                   </button>
-                  <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="heritage-portal-link" title="Open official Ministry of Culture portal record">
-                    Portal ↗
+                  <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="heritage-portal-link" title="Open ${sourceName}">
+                    ${item.sourceName ? "Source ↗" : "Portal ↗"}
                   </a>
                 </div>
               </div>
@@ -3523,6 +3871,14 @@
             sourceLink.textContent = "View source and attribution on Sketchfab";
 
             info.append(title, sourceLink);
+            const monument = monuments.find((entry) => entry.uid === uid);
+            if (monument) {
+              const exploreButton = document.createElement("button");
+              exploreButton.type = "button";
+              exploreButton.textContent = "Open model key points";
+              exploreButton.addEventListener("click", () => openFullscreenViewer(monument, "model"));
+              info.append(exploreButton);
+            }
             card.append(frame, info);
             return card;
           }
@@ -3552,18 +3908,7 @@
               console.warn("Sketchfab direct API request bypassed, attempting local monument.json catalog:", err);
             }
 
-            // 2. Try proxy /api/sources/sketchfab/search if running local api server
-            if (models.length === 0) {
-              try {
-                const proxyResp = await fetch(`/api/sources/sketchfab/search?q=${encodeURIComponent(query)}&limit=${RESULT_LIMIT}`);
-                if (proxyResp.ok) {
-                  const proxyJson = await proxyResp.json();
-                  models = getModels(proxyJson);
-                }
-              } catch (_) {}
-            }
-
-            // 3. Try monument.json / public/monument.json
+            // 2. Try the static monument.json catalog packaged with this site.
             if (models.length === 0) {
               try {
                 const jsonRes = await fetch("monument.json").catch(() => fetch("/monument.json"));
@@ -3586,7 +3931,7 @@
               }
             }
 
-            // 4. Built-in catalog fallback
+            // 3. Built-in catalog fallback
             if (models.length === 0) {
               const qLower = query.toLowerCase();
               const matched = LOCAL_CATALOG.filter(m =>
